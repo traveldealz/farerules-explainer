@@ -3,5 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "serve": "wcd-cli serve khFrtKXgTGWe7koI9o43 --open"
+  },
+  "dependencies": {
+    "mocha": "^9.0.2"
   }
 }

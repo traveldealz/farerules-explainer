@@ -3,11 +3,12 @@ export default class {
   text = '';
 
   constructor( text ) {
-    this.text = text;
+    this.text = text.replaceAll(/\n+/g, " ").replaceAll(/[ ]+/g, ' ')
+
   }
 
   get issued_until() {
-    let found = this.text.match(/TICKETS MUST BE ISSUED (?:ON\/AFTER \d{2}\w{3} \d{2} AND |)ON\/BEFORE[ \n]+(\d{2})(\w{3}) (\d{2})/);
+    let found = this.text.match(/TICKETS MUST BE ISSUED (?:ON\/AFTER \d{2}\w{3} \d{2} AND |)ON\/BEFORE (\d{2})(\w{3}) (\d{2})/);
 
     if(null === found || 4 !== found.length) {
       return null;
@@ -29,17 +30,21 @@ export default class {
 
   }
 
+
+  get free_stopover(){
+    let found = this.text.match(/FREE STOPOVER PERMITTED/);
+    return !(null === found || 1 !== found.length)
+  }
+
   get travel_period() {
-    let found = this.text.match(/VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/[ \n]+BEFORE (\d{2}\w{3} \d{2})/);
-    console.log(found);
+    let found = this.text.match(/VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/\s*BEFORE (\d{2}\w{3} \d{2})/);
     if(null === found || 3 !== found.length) {
       return null;
     }
-
     return [
       {
-        from: this.#parse_date(found[1]),
-        to: this.#parse_date(found[2]),
+        from: found[1] != undefined ? this.#parse_date(found[1]) : null,
+        to: found[2] != undefined ? this.#parse_date(found[2]) : null,
       }
     ];
     // ToDo
@@ -47,15 +52,41 @@ export default class {
   }
 
   get travel_period_blackout() {
-    return this.#parse_travel_period(/TRAVEL IS NOT PERMITTED ([A-Z0-9 \n]+)./);
+    return this.#parse_travel_period(/TRAVEL IS NOT PERMITTED ([A-Z0-9 ]+)./);
   }
 
   get travel_period_from() {
-    return this.#parse_travel_period(/FROM [A-Z ]+ -\n*[ ]*PERMITTED ([A-Z0-9 \n]+) FOR EACH/);
+
+    return this.#parse_travel_period(/FROM [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/);
   }
 
   get travel_period_to() {
-    return this.#parse_travel_period(/TO [A-Z ]+ -\n*[ ]*PERMITTED ([A-Z0-9 \n]+) FOR EACH/);
+    return this.#parse_travel_period(/TO [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/);
+  }
+
+  get min_stay(){
+    let found = this.text.match(/NO EARLIER THAN (\d+) DAYS AFTER/);
+
+    if(null === found || 2 !== found.length) {
+      return null;
+    }
+
+    return parseInt(found[1]);
+  }
+
+  get sunday_rule(){
+    let found = this.text.match(/THE FIRST SUN/);
+    return found != null;
+  }
+
+  get max_stay(){
+    let found = this.text.match(/NO LATER THAN (\d+) MONTHS AFTER/);
+
+    if(null === found || 2 !== found.length) {
+      return null;
+    }
+
+    return parseInt(found[1]);
   }
 
   #parse_travel_period(regex) {
@@ -69,7 +100,6 @@ export default class {
       let [from, to] = period.split('THROUGH').map(date => this.#parse_date(date) );
       return {from, to}
     });
-
     return periods;
   }
 
