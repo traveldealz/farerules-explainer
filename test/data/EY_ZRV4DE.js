@@ -1,6 +1,7 @@
 export default {
   expected: {
     issued_until: '2021-08-02',
+    advanced_reservation_days: 5,
   },
   text: `GENERAL INFORMATION
 
