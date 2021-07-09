@@ -20,6 +20,8 @@ describe("Test Properties", function() {
     if(expected.min_stay) it(`${key}: min_stay`, () => expect((new Explainer(text).min_stay)).to.eql(expected.min_stay) );
     if(expected.max_stay) it(`${key}: max_stay`, () => expect((new Explainer(text).max_stay)).to.eql(expected.max_stay) );
     if(expected.sunday_rule) it(`${key}: sunday_rule`, () => expect((new Explainer(text).sunday_rule)).to.eql(expected.sunday_rule) );
+    if(expected.booking_class) it(`${key}: booking_class`, () => expect((new Explainer(text).booking_class)).to.eql(expected.booking_class) );
+    if(expected.stopover) it(`${key}: stopover`, () => expect((new Explainer(text).stopover)).eql(expected.stopover) );
   } );
 
 });
