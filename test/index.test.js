@@ -48,7 +48,7 @@ describe('Test Properties', function () {
         expect(new Explainer(text).max_stay).to.eql(expected.max_stay));
     if (expected.sunday_rule)
       it(`${key}: sunday_rule`, () =>
-        expect(new Explainer(text).sunday_rule).to.eql(expected.sunday_rule));
+        expect(new Explainer(text).sunday_rule).to.equal(expected.sunday_rule));
     if (expected.booking_class)
       it(`${key}: booking_class`, () =>
         expect(new Explainer(text).booking_class).to.eql(
