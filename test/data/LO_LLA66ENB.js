@@ -1,53 +1,55 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: 7,
-        min_stay: 6,
-        sunday_rule: 'or',
-        booking_class: 'L',
-        stopover: 'not permitted',
-        max_stay: 12,
-        travel_period_from: [
-            {
-                from: '2020-10-18',
-                to: '2021-12-22',
-            },
-            {
-                from: '2021-12-28',
-                to: '2022-04-08',
-            },
-            {
-                from: '2022-04-17',
-                to: '2022-06-30',
-            },
-            {
-                from: '2022-08-16',
-                to: '2022-12-21',
-            },
-            {
-                from: '2022-12-28',
-                to: '2022-12-31',
-            }      ],
-        travel_period_to: [
-            {
-                from: '2020-10-18',
-                to: '2021-12-25',
-            },
-            {
-                from: '2022-01-10',
-                to: '2022-04-15',
-            },
-            {
-                from: '2022-04-24',
-                to: '2022-07-14',
-            },
-            {
-                from: '2022-08-30',
-                to: '2022-12-25',
-            }      ],
-        travel_period_blackout: null
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: 7,
+    min_stay: 6,
+    sunday_rule: 'or',
+    booking_class: 'L',
+    stopover: 'not permitted',
+    max_stay: 12,
+    travel_period_from: [
+      {
+        from: '2020-10-18',
+        to: '2021-12-22',
+      },
+      {
+        from: '2021-12-28',
+        to: '2022-04-08',
+      },
+      {
+        from: '2022-04-17',
+        to: '2022-06-30',
+      },
+      {
+        from: '2022-08-16',
+        to: '2022-12-21',
+      },
+      {
+        from: '2022-12-28',
+        to: '2022-12-31',
+      },
+    ],
+    travel_period_to: [
+      {
+        from: '2020-10-18',
+        to: '2021-12-25',
+      },
+      {
+        from: '2022-01-10',
+        to: '2022-04-15',
+      },
+      {
+        from: '2022-04-24',
+        to: '2022-07-14',
+      },
+      {
+        from: '2022-08-30',
+        to: '2022-12-25',
+      },
+    ],
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 BASIC SEASON ECONOMY RT UNBUNDLED FARES   L
  FOR ROUND TRIP FARES
@@ -951,4 +953,4 @@ LO  SPECIAL ECONOMYHAND BAGGAGE ONLY FARE
    FARES MAY BE USED FOR UPGRADING
    FROM THE LOWER FARE PROVIDED ALL
    CONDITIONS ARE MET.`,
-}
+};

@@ -1,28 +1,29 @@
 export default {
-    expected: {
-        issued_until: '2021-07-22',
-        advanced_reservation_days: 5,
-        min_stay: 4,
-        sunday_rule: 'or',
-        booking_class: 'G',
-        stopover: 'not permitted',
-        max_stay: 3,
-        travel_period: [
-            {
-                from: '01-03',
-                to: '06-30',
-            },
-            {
-                from: '08-16',
-                to: '12-16',
-            },
-            {
-                from: null,
-                to: '2022-03-31',
-            }  ],
-        travel_period_blackout: null
-    },
-    text: `General notes
+  expected: {
+    issued_until: '2021-07-22',
+    advanced_reservation_days: 5,
+    min_stay: 4,
+    sunday_rule: 'or',
+    booking_class: 'G',
+    stopover: 'not permitted',
+    max_stay: 3,
+    travel_period: [
+      {
+        from: '01-03',
+        to: '06-30',
+      },
+      {
+        from: '08-16',
+        to: '12-16',
+      },
+      {
+        from: null,
+        to: '2022-03-31',
+      },
+    ],
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 BASIC SEASON ECONOMY PROMOTIONAL          G
 UNBUNDLED FARES
@@ -453,4 +454,4 @@ KLM -  LIGHT FARES - HAND BAGGAGE ONLY
    THE NUMBER OF SEATS WHICH THE CARRIER SHALL MAKE
    AVAILABLE ON A GIVEN FLIGHT WILL BE DETERMINED BY THE
    CARRIERS BEST JUDGMENT`,
-}
+};

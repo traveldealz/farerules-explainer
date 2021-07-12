@@ -6,13 +6,13 @@ export default {
       {
         from: '2021-11-01',
         to: '2022-03-31',
-      }
+      },
     ],
     travel_period_blackout: [
       {
         from: '2021-12-15',
         to: '2022-01-15',
-      }
+      },
     ],
   },
   text: `General notes
@@ -668,4 +668,4 @@ TAP DISCOUNT FARES WITHIN AREA 2
    IN THE BOOKING SEQUENCE.OTHERWISE THE FARE WILL BE
    RECALCULATED BASED ON THE ACTUAL FLIGHT ROUTING.
    FREE BAGGAGE ALLOWANCE IS 0PC`,
-}
+};

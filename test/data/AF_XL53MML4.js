@@ -1,28 +1,29 @@
 export default {
-    expected: {
-        issued_until: '2021-07-22',
-        advanced_reservation_days: 5,
-        min_stay: 4,
-        booking_class: 'X',
-        max_stay: 3,
-        stopover: 'not permitted',
-        sunday_rule: 'or',
-        travel_period: [
-            {
-                from: '01-06',
-                to: '07-04',
-            },
-            {
-                from: '08-17',
-                to: '12-08',
-            },
-            {
-                from: null,
-                to: '2022-03-31',
-            }],
-        travel_period_blackout: null,
-    },
-    text: `General notes
+  expected: {
+    issued_until: '2021-07-22',
+    advanced_reservation_days: 5,
+    min_stay: 4,
+    booking_class: 'X',
+    max_stay: 3,
+    stopover: 'not permitted',
+    sunday_rule: 'or',
+    travel_period: [
+      {
+        from: '01-06',
+        to: '07-04',
+      },
+      {
+        from: '08-17',
+        to: '12-08',
+      },
+      {
+        from: null,
+        to: '2022-03-31',
+      },
+    ],
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 BASIC SEASON ECONOMY PROMOTIONAL          X
 UNBUNDLED FARES
@@ -616,4 +617,4 @@ AIR FRANCE -- LIGHT FARES -- HAND BAGGAGE ONLY
    THE NUMBER OF SEATS WHICH THE CARRIER SHALL MAKE
    AVAILABLE ON A GIVEN FLIGHT WILL BE DETERMINED BY THE
    CARRIERS BEST JUDGMENT`,
-}
+};

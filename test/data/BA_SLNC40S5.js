@@ -1,31 +1,33 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: null,
-        min_stay: null,
-        max_stay: 12,
-        sunday_rule: true,
-        travel_period_from: [
-            {
-                from: '08-20',
-                to: '12-14',
-            },
-            {
-                from: '12-31',
-                to: '06-25',
-            }],
-        travel_period_to: [
-            {
-                from: '08-27',
-                to: '12-21',
-            },
-            {
-                from: '01-07',
-                to: '07-02',
-            }],
-        travel_period_blackout: null,
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: null,
+    min_stay: null,
+    max_stay: 12,
+    sunday_rule: true,
+    travel_period_from: [
+      {
+        from: '08-20',
+        to: '12-14',
+      },
+      {
+        from: '12-31',
+        to: '06-25',
+      },
+    ],
+    travel_period_to: [
+      {
+        from: '08-27',
+        to: '12-21',
+      },
+      {
+        from: '01-07',
+        to: '07-02',
+      },
+    ],
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 BASIC SEASON ROUND TRIP INSTANT PURCHASE  S
 FARES
@@ -892,4 +894,4 @@ Category 50: Application
    CARRIERS BEST JUDGMENT
  RULES NOT APPLICABLE
    35 PASSENGER EXPENSES EN ROUTE`,
-}
+};
