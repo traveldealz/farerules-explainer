@@ -56,30 +56,27 @@ export default class {
       /Seasonal restrictions\s*PERMITTED ([A-Z0-9 ]+) ON/
     );
     if ((null === found || 3 !== found.length) && null === found2) {
-      console.log('Here');
-
       return null;
     }
 
     if (found2 != null && found != null) {
-      return found2.concat([
+      return [
+        ...found2,
         {
-          from: found[1] != undefined ? this.#parse_date(found[1]) : null,
-          to: found[2] != undefined ? this.#parse_date(found[2]) : null,
+          from: found[1] ? this.#parse_date(found[1]) : null,
+          to: found[2] ? this.#parse_date(found[2]) : null,
         },
-      ]);
+      ];
     } else if (found2 != null) {
       return found2;
     } else {
       return [
         {
-          from: found[1] != undefined ? this.#parse_date(found[1]) : null,
-          to: found[2] != undefined ? this.#parse_date(found[2]) : null,
+          from: found[1] ? this.#parse_date(found[1]) : null,
+          to: found[2] ? this.#parse_date(found[2]) : null,
         },
       ];
     }
-    // ToDo
-    //return this.#parse_travel_period(/FROM [A-Z ]+ -\n*[ ]*PERMITTED ([A-Z0-9 \n]+) FOR EACH/);
   }
 
   get travel_period_blackout() {
@@ -110,7 +107,7 @@ export default class {
 
   get sunday_rule() {
     let found = this.text.match(/THE FIRST SUN/);
-    if (found == null) {
+    if (found === null) {
       return null;
     }
     let findand = this.text.match(/AND - TRAVEL FROM/);
