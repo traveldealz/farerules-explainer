@@ -125,6 +125,74 @@ export default class {
     return parseInt(found[1]);
   }
 
+  explain(lang = 'en') {
+    let result = '';
+
+    if ('de' === lang) {
+      result += `Buchbar ist der Tarif ${
+        this.issued_until ? `bis zum ${this.issued_until} ` : ''
+      }für `;
+
+      if (this.travel_period) {
+        result += `Reisen zwischen dem ${this.travel_period
+          .map((period) => `${period.from} - ${period.to}`)
+          .join(', ')} `;
+      } else if (this.travel_period_from) {
+        result += `Abflüge zwischen dem ${this.travel_period_from
+          .map((period) => `${period.from} - ${period.to}`)
+          .join(', ')} `;
+      }
+
+      if (this.travel_period_to) {
+        result += `und Rückflüge zwischen dem ${this.travel_period_to
+          .map((period) => `${period.from} - ${period.to}`)
+          .join(', ')} `;
+      }
+
+      result += `. `;
+
+      if (null === this.issued_until) {
+        result += `Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
+      }
+
+      if (this.min_stay) {
+        result += `Der Mindestaufenthalt beträgt ${this.min_stay} Tage${
+          'or' === this.sunday_rule
+            ? ` oder eine Nacht von Samstag auf Sonntag`
+            : 'and' === this.sunday_rule
+            ? ` und eine Nacht von Samstag auf Sonntag`
+            : ''
+        }`;
+
+        if (this.max_stay) {
+          result += ` und maximal ${
+            1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
+          }. `;
+        } else {
+          result += `. `;
+        }
+      } else if (this.max_stay) {
+        result += `Der maximale Aufenthalt beträgt ${
+          1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
+        } . `;
+      }
+
+      if (this.advanced_reservation_days) {
+        result += `Das Ticket muss mindestens ${this.advanced_reservation_days} Tage vor Abflug ausgestellt werden. `;
+      }
+
+      if ('free' === this.stopover) {
+        result += `Mindestens ein kostenloser Stopover ist erlaubt.`;
+      } else if ('not permitted' === this.stopover) {
+        result += `Stopover sind nicht erlaubt.`;
+      }
+    } else {
+      // Fallback to en
+    }
+
+    return result;
+  }
+
   #parse_travel_period(regex) {
     let found = this.text.match(regex);
 
