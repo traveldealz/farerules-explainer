@@ -1,5 +1,5 @@
-const template = document.createElement("template");
-template.innerHTML = /*html*/`
+const template = document.createElement('template');
+template.innerHTML = /*html*/ `
   <style>
   </style>
   <textarea></textarea>
@@ -9,7 +9,7 @@ class FareRules extends HTMLElement {
   constructor() {
     super();
     this.count = 0;
-    this.attachShadow({ mode: "open" });
+    this.attachShadow({ mode: 'open' });
   }
 
   connectedCallback() {
@@ -17,4 +17,4 @@ class FareRules extends HTMLElement {
   }
 }
 
-customElements.define("fare-rules", FareRules);
+customElements.define('fare-rules', FareRules);

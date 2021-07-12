@@ -1,25 +1,25 @@
 export default {
-    expected: {
-        issued_until: '2021-07-14',
-        advanced_reservation_days: null,
-        min_stay: 4,
-        sunday_rule: true,
-        max_stay: 12,
-        travel_period: [
-            {
-                from: null,
-                to: '2022-03-11',
-            }],
-        travel_period_blackout: [
-            {
-                from: '2021-06-25',
-                to: '2021-08-07',
-            },
-            {from:'2021-12-17',
-                to:'2021-12-30'}
-        ],
-    },
-    text: `General notes
+  expected: {
+    issued_until: '2021-07-14',
+    advanced_reservation_days: null,
+    min_stay: 4,
+    sunday_rule: true,
+    max_stay: 12,
+    travel_period: [
+      {
+        from: null,
+        to: '2022-03-11',
+      },
+    ],
+    travel_period_blackout: [
+      {
+        from: '2021-06-25',
+        to: '2021-08-07',
+      },
+      { from: '2021-12-17', to: '2021-12-30' },
+    ],
+  },
+  text: `General notes
 
 SUPER INSTANT PURCHASE 2ND LEVEL FARES    U
  FOR ROUND TRIP FARES
@@ -592,4 +592,4 @@ Category 50: Application
    TICKET MAY DIFFER FROM THE BOOKING CLASS RELEVANT
    FOR THE MILEAGE ACCRUAL
    -----------------------------------------`,
-}
+};

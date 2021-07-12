@@ -1,14 +1,14 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: null,
-        min_stay: 6,
-        max_stay: null,
-        travel_period: null,
-        travel_period_blackout: null,
-        sunday_rule: false
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: null,
+    min_stay: 6,
+    max_stay: null,
+    travel_period: null,
+    travel_period_blackout: null,
+    sunday_rule: false,
+  },
+  text: `General notes
 
 ECONOMY RT UNBUNDLED FARES                Z
  FOR ROUND TRIP FARES
@@ -3587,4 +3587,4 @@ FINNAIR LIGHT FARES
  APPLICATION
    CLASS OF SERVICE
      THESE FARES APPLY FOR ECONOMY CLASS SERVICE.`,
-}
+};

@@ -1,53 +1,55 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: 14,
-        min_stay: 6,
-        sunday_rule: 'or',
-        stopover: null,
-        booking_class: null,
-        max_stay: 12,
-        travel_period_from: [
-            {
-                from: '2020-11-13',
-                to: '2021-12-22',
-            },
-            {
-                from: '2021-12-28',
-                to: '2022-04-08',
-            },
-            {
-                from: '2022-04-17',
-                to: '2022-06-30',
-            },
-            {
-                from: '2022-08-16',
-                to: '2022-12-21',
-            },
-            {
-                from: '2022-12-28',
-                to: '2022-12-31',
-            }      ],
-        travel_period_to: [
-            {
-                from: '2020-11-13',
-                to: '2021-12-25',
-            },
-            {
-                from: '2022-01-10',
-                to: '2022-04-15',
-            },
-            {
-                from: '2022-04-24',
-                to: '2022-07-14',
-            },
-            {
-                from: '2022-08-30',
-                to: '2022-12-25',
-            }      ],
-        travel_period_blackout: null
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: 14,
+    min_stay: 6,
+    sunday_rule: 'or',
+    stopover: null,
+    booking_class: null,
+    max_stay: 12,
+    travel_period_from: [
+      {
+        from: '2020-11-13',
+        to: '2021-12-22',
+      },
+      {
+        from: '2021-12-28',
+        to: '2022-04-08',
+      },
+      {
+        from: '2022-04-17',
+        to: '2022-06-30',
+      },
+      {
+        from: '2022-08-16',
+        to: '2022-12-21',
+      },
+      {
+        from: '2022-12-28',
+        to: '2022-12-31',
+      },
+    ],
+    travel_period_to: [
+      {
+        from: '2020-11-13',
+        to: '2021-12-25',
+      },
+      {
+        from: '2022-01-10',
+        to: '2022-04-15',
+      },
+      {
+        from: '2022-04-24',
+        to: '2022-07-14',
+      },
+      {
+        from: '2022-08-30',
+        to: '2022-12-25',
+      },
+    ],
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 Category 3: Seasonal restrictions
 
@@ -478,4 +480,4 @@ AIR FRANCE NEGOTIATED ECONOMY FARES
    BE HONORED IF ALL THE COUPONS ARE NOT USED IN THE
    SEQUENCE PROVIDED IN THE TICKET / OR ELECTRONIC
    TICKET / .`,
-}
+};

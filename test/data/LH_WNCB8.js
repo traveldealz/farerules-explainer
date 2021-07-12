@@ -1,16 +1,16 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: null,
-        min_stay: 6,
-        sunday_rule: null,
-        booking_class: 'W',
-        stopover: null,
-        max_stay: 12,
-        travel_period: null,
-        travel_period_blackout: null
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: null,
+    min_stay: 6,
+    sunday_rule: null,
+    booking_class: 'W',
+    stopover: null,
+    max_stay: 12,
+    travel_period: null,
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 INSTANT PURCHASE 3RD LEVEL FARES          W
 Between AREA 1 and AREA 2 FOR ROUND TRIP FARES
@@ -723,4 +723,4 @@ LUFTHANSA RESTRICTED FARE                   //-A-//
    IN THE BOOKED SEQUENCE.
    OTHERWISE THE FARE WILL BE RECALCULATED BASED ON
    THE ACTUAL FLIGHT ROUTING.`,
-}
+};

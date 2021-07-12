@@ -1,32 +1,33 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: null,
-        min_stay: null,
-        sunday_rule: null,
-        booking_class: 'V',
-        stopover: null,
-        max_stay: 12,
-        travel_period: [
-            {
-                from: '12-28',
-                to: '03-25',
-            },
-            {
-                from: '03-29',
-                to: '07-16',
-            },
-            {
-                from: '07-27',
-                to: '12-15',
-            },
-            {
-                from: '12-21',
-                to: '12-23',
-            }  ],
-        travel_period_blackout: null
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: null,
+    min_stay: null,
+    sunday_rule: null,
+    booking_class: 'V',
+    stopover: null,
+    max_stay: 12,
+    travel_period: [
+      {
+        from: '12-28',
+        to: '03-25',
+      },
+      {
+        from: '03-29',
+        to: '07-16',
+      },
+      {
+        from: '07-27',
+        to: '12-15',
+      },
+      {
+        from: '12-21',
+        to: '12-23',
+      },
+    ],
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 LOW/OFF-PEAK SEASON WEEKEND ECONOMY       V
 RESTRICTED FARES
@@ -1404,4 +1405,4 @@ Category 50: Application
    TICKETED IN GDS WITHIN 24H OR WITHIN
    STIPULATED TICKETING TIME LIMIT WHENEVER THIS
    IS LESS THAN 24H.`,
-}
+};

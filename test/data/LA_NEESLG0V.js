@@ -1,16 +1,16 @@
 export default {
-    expected: {
-        issued_until: null,
-        advanced_reservation_days: null,
-        min_stay: 4,
-        sunday_rule: 'and',
-        booking_class: 'N',
-        stopover: null,
-        max_stay: 12,
-        travel_period: null,
-        travel_period_blackout: null
-    },
-    text: `General notes
+  expected: {
+    issued_until: null,
+    advanced_reservation_days: null,
+    min_stay: 4,
+    sunday_rule: 'and',
+    booking_class: 'N',
+    stopover: null,
+    max_stay: 12,
+    travel_period: null,
+    travel_period_blackout: null,
+  },
+  text: `General notes
 
 ECONOMY RT UNBUNDLED LEVEL 3 FARES        N
  APPLIES FOR ROUND TRIP FARES
@@ -665,4 +665,4 @@ LIGHT FARE
  APPLICATION
    CLASS OF SERVICE
      THESE FARES APPLY FOR ECONOMY CLASS SERVICE.`,
-}
+};

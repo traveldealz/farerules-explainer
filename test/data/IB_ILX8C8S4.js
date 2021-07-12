@@ -36,7 +36,7 @@ export default {
       {
         from: '03-31',
         to: '04-17',
-      }
+      },
     ],
   },
   text: `General notes
@@ -628,4 +628,4 @@ Category 50: Application
    PASSENGER EXPENSES NOT ABSORBED BY CARRIER
    FARE DOES NOT APPLY FOR REFUND CALCULATION AFTER
    TRAVEL AT A HIGHER FARE.`,
-}
+};
