@@ -16,7 +16,7 @@ export default class {
 
   get issued_until() {
     let found = this.text.match(
-      /TICKETS MUST BE ISSUED (?:ON\/AFTER \d{2}\w{3} \d{2} AND |)ON\/BEFORE (\d{2})(\w{3}) (\d{2})/
+        /TICKETS MUST BE ISSUED (?:ON\/AFTER \d{2}\w{3} \d{2} AND |)ON\/BEFORE (\d{2})(\w{3}) (\d{2})/
     );
 
     if (null === found || 4 !== found.length) {
@@ -30,7 +30,7 @@ export default class {
 
   get advanced_reservation_days() {
     let found = this.text.match(
-      /RESERVATIONS FOR ALL SECTORS (?:AND TICKETING )*ARE REQUIRED AT LEAST (\d{1,3}) DAYS/
+        /RESERVATIONS FOR ALL SECTORS (?:AND TICKETING )*ARE REQUIRED AT LEAST (\d{1,3}) DAYS/
     );
 
     if (null === found || 2 !== found.length) {
@@ -43,17 +43,17 @@ export default class {
   get stopover() {
     let found = this.text.match(/FREE STOPOVER PERMITTED/);
     let found2 = this.text.match(
-      /(STOPOVERS NOT PERMITTED)|(NO STOPOVERS PERMITTED)/
+        /(STOPOVERS NOT PERMITTED)|(NO STOPOVERS PERMITTED)/
     );
     return found ? 'free' : found2 ? 'not permitted' : null;
   }
 
   get travel_period() {
     let found = this.text.match(
-      /VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/\s*BEFORE (\d{2}\w{3} \d{2})/
+        /VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/\s*BEFORE (\d{2}\w{3} \d{2})/
     );
     let found2 = this.#parse_travel_period(
-      /Seasonal restrictions\s*PERMITTED ([A-Z0-9 ]+) ON/
+        /Seasonal restrictions\s*PERMITTED ([A-Z0-9 ]+) ON/
     );
     if ((null === found || 3 !== found.length) && null === found2) {
       return null;
@@ -85,13 +85,13 @@ export default class {
 
   get travel_period_from() {
     return this.#parse_travel_period(
-      /FROM [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/
+        /FROM [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/
     );
   }
 
   get travel_period_to() {
     return this.#parse_travel_period(
-      /TO [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/
+        /TO [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/
     );
   }
 
@@ -130,23 +130,25 @@ export default class {
 
     if ('de' === lang) {
       result += `Buchbar ist der Tarif ${
-        this.issued_until ? `bis zum ${this.issued_until} ` : ''
+          this.issued_until ? `bis zum ${this.#date_to_text_de(this.issued_until)} ` : ''
       }für `;
 
       if (this.travel_period) {
         result += `Reisen zwischen dem ${this.travel_period
-          .map((period) => `${period.from} - ${period.to}`)
-          .join(', ')} `;
+            .map((period) => `${this.#date_to_text_de(period.from)} ${period.from == null ? '' : ' - '} ${this.#date_to_text_de(period.to)}`)
+            .join(', ')} `;
       } else if (this.travel_period_from) {
         result += `Abflüge zwischen dem ${this.travel_period_from
-          .map((period) => `${period.from} - ${period.to}`)
-          .join(', ')} `;
+            .map((period) => `${this.#date_to_text_de(period.from)} - ${this.#date_to_text_de(period.to)}`)
+            .join(', ')} `;
       }
 
-      if (this.travel_period_to) {
+      else if (this.travel_period_to) {
         result += `und Rückflüge zwischen dem ${this.travel_period_to
-          .map((period) => `${period.from} - ${period.to}`)
-          .join(', ')} `;
+            .map((period) => `${this.#date_to_text_de(period.from)} - ${this.#date_to_text_de(period.to)}`)
+            .join(', ')} `;
+      }else{
+        result += `Flüge ohne einen bestimmten Reisezeitraum.`
       }
 
       result += `. `;
@@ -157,28 +159,31 @@ export default class {
 
       if (this.min_stay) {
         result += `Der Mindestaufenthalt beträgt ${this.min_stay} Tage${
-          'or' === this.sunday_rule
-            ? ` oder eine Nacht von Samstag auf Sonntag`
-            : 'and' === this.sunday_rule
-            ? ` und eine Nacht von Samstag auf Sonntag`
-            : ''
+            'or' === this.sunday_rule
+                ? ` oder eine Nacht von Samstag auf Sonntag`
+                : 'and' === this.sunday_rule
+                ? ` und eine Nacht von Samstag auf Sonntag`
+                : ''
         }`;
 
         if (this.max_stay) {
           result += ` und maximal ${
-            1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
+              1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
           }. `;
         } else {
           result += `. `;
         }
       } else if (this.max_stay) {
         result += `Der maximale Aufenthalt beträgt ${
-          1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
+            1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
         } . `;
       }
 
+      result += `Die Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`
       if (this.advanced_reservation_days) {
-        result += `Das Ticket muss mindestens ${this.advanced_reservation_days} Tage vor Abflug ausgestellt werden. `;
+        result += ` und müssen mindestens ${this.advanced_reservation_days} Tage vor Abflug gebucht werden. `;
+      }else{
+        result += `.`;
       }
 
       if ('free' === this.stopover) {
@@ -202,8 +207,8 @@ export default class {
 
     let periods = found[1].split('OR').map((period) => {
       let [from, to] = period
-        .split('THROUGH')
-        .map((date) => this.#parse_date(date));
+          .split('THROUGH')
+          .map((date) => this.#parse_date(date));
       return { from, to };
     });
     return periods;
@@ -211,10 +216,24 @@ export default class {
 
   #parse_date(date) {
     let [, day, month_name, year = null] = date
-      .trim()
-      .match(/(\d{2})(\w{3})(?: (\d{2})|)/);
+        .trim()
+        .match(/(\d{2})(\w{3})(?: (\d{2})|)/);
 
     return (year ? '20' + year + '-' : '') + months[month_name] + '-' + day;
+  }
+
+  #date_to_text_de(date) {
+    console.log(date)
+    if(date == null){
+      return 'bis zum '
+    }
+    if(date.length == 10){
+      return date.substr(8,2) + '. ' + monate[date.substr(5,2)] + ' ' + date.substr(0,4);
+    }else if (date.length == 5){
+      return date.substr(3,2) + '. ' + monate[date.substr(0,2)];
+    }else{
+      return ' '
+    }
   }
 }
 
@@ -231,4 +250,19 @@ const months = {
   OCT: '10',
   NOV: '11',
   DEC: '12',
+};
+
+const monate = {
+  '01':'Januar',
+  '02':'Februar',
+  '03':'März',
+  '04':'April',
+  '05':'Mai',
+  '06':'Juni',
+  '07':'Juli',
+  '08':'August',
+  '09':'September',
+  '10':'Oktober',
+  '11':'November',
+  '12':'Dezember',
 };
