@@ -57,15 +57,11 @@ describe('Test Properties', function () {
     if (expected.stopover)
       it(`${key}: stopover`, () =>
         expect(new Explainer(text).stopover).eql(expected.stopover));
+    if (expected.weekday_from)
+      it(`${key}: weekday_from`, () =>
+        expect(new Explainer(text).weekday_from).to.eql(expected.weekday_from));
+    if (expected.weekday_to)
+      it(`${key}: weekday_to`, () =>
+        expect(new Explainer(text).weekday_to).to.eql(expected.weekday_to));
   });
-  if (expected.weekday_from)
-    it(`${key}: weekday_from`, () =>
-        expect(new Explainer(text).weekday_from).to.eql(
-            expected.weekday_from
-        ));
-  if (expected.weekday_to)
-    it(`${key}: weekday_to`, () =>
-        expect(new Explainer(text).weekday_to).to.eql(
-            expected.weekday_to
-        ));
 });
