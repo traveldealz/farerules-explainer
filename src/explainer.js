@@ -151,7 +151,7 @@ export default class {
     if ('de' === lang) {
       result += `Buchbar ist der Tarif ${
         this.issued_until
-          ? `bis zum ${this.#date_to_text_de(this.issued_until)} `
+          ? `bis zum ${this.#date_to_text(this.issued_until, lang)} `
           : ''
       }für `;
 
@@ -159,17 +159,18 @@ export default class {
         result += `Reisen zwischen dem ${this.travel_period
           .map(
             (period) =>
-              `${this.#date_to_text_de(period.from)} ${
+              `${this.#date_to_text(period.from, lang)} ${
                 period.from == null ? '' : ' - '
-              } ${this.#date_to_text_de(period.to)}`
+              } ${this.#date_to_text(period.to, lang)}`
           )
           .join(', ')} `;
       } else if (this.travel_period_from) {
         result += `Abflüge zwischen dem ${this.travel_period_from
           .map(
             (period) =>
-              `${this.#date_to_text_de(period.from)} - ${this.#date_to_text_de(
-                period.to
+              `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
+                period.to,
+                lang
               )}`
           )
           .join(', ')} `;
@@ -177,8 +178,9 @@ export default class {
         result += `und Rückflüge zwischen dem ${this.travel_period_to
           .map(
             (period) =>
-              `${this.#date_to_text_de(period.from)} - ${this.#date_to_text_de(
-                period.to
+              `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
+                period.to,
+                lang
               )}`
           )
           .join(', ')} `;
@@ -257,23 +259,22 @@ export default class {
     return (year ? '20' + year + '-' : '') + months[month_name] + '-' + day;
   }
 
-  #date_to_text_de(date) {
+  #date_to_text(date, lang = 'en') {
     if (date == null) {
       return 'bis zum ';
     }
-    if (date.length == 10) {
-      return (
-        date.substr(8, 2) +
-        '. ' +
-        monate[date.substr(5, 2)] +
-        ' ' +
-        date.substr(0, 4)
+    if (5 === date.length) {
+      return new Date(new Date().getFullYear() + '-' + date).toLocaleDateString(
+        lang,
+        { day: 'numeric', month: 'long' }
       );
-    } else if (date.length == 5) {
-      return date.substr(3, 2) + '. ' + monate[date.substr(0, 2)];
-    } else {
-      return ' ';
     }
+
+    return new Date(date).toLocaleDateString(lang, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
   }
 }
 
@@ -290,19 +291,4 @@ const months = {
   OCT: '10',
   NOV: '11',
   DEC: '12',
-};
-
-const monate = {
-  '01': 'Januar',
-  '02': 'Februar',
-  '03': 'März',
-  '04': 'April',
-  '05': 'Mai',
-  '06': 'Juni',
-  '07': 'Juli',
-  '08': 'August',
-  '09': 'September',
-  10: 'Oktober',
-  11: 'November',
-  12: 'Dezember',
 };
