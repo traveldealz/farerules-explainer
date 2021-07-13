@@ -4,20 +4,25 @@ const template = document.createElement('template');
 template.innerHTML = /*html*/ `
   <style>
   </style>
-  <textarea></textarea>
-  <p></p>
-  <button>Explain</button>`;
+  <form>
+    <textarea></textarea>
+    <button type="submit">Explain</button>
+  </form>
+  <p></p>`;
 
 class FareRules extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
+  connectedCallback() {
+    this.appendChild(template.content.cloneNode(true));
+    this.querySelector('form').addEventListener('submit', (event) =>
+      this.submit(event)
+    );
   }
 
-  connectedCallback() {
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-    let explain = new Explainer(fare_rule);
-    this.shadowRoot.querySelector('p').innerHTML = explain.explain('de');
+  submit(event) {
+    event.preventDefault();
+    let text = this.querySelector('form textarea').value;
+    let explainer = new Explainer(text);
+    this.querySelector('p').innerHTML = explainer.explain('de');
   }
 }
 
