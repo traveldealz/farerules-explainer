@@ -69,6 +69,7 @@ export default class {
   }
 
   get travel_period() {
+    // ToDo: In Seasonal Restrictions und Travel Period aufteilen
     let found = this.text.match(
       /VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/\s*BEFORE (\d{2}\w{3} \d{2})/
     );
