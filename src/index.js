@@ -22,6 +22,7 @@ class FareRules extends HTMLElement {
     event.preventDefault();
     let text = this.querySelector('form textarea').value;
     let explainer = new Explainer(text);
+    console.log(explainer.toString());
     this.querySelector('p').innerHTML = explainer.explain('de');
   }
 }

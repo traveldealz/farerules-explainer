@@ -313,6 +313,72 @@ export default class {
       year: 'numeric',
     });
   }
+
+  static month_day_period_to_yearly_periods(from, to, now = new Date()) {
+    let this_year_from, this_year_to;
+    this_year_from = this_year_to = now.getFullYear();
+    let next_year_from, next_year_to;
+    next_year_from = next_year_to = this_year_from + 1;
+    let last_year = this_year_from - 1;
+
+    if (
+      new Date(this_year_from + '-' + from) > new Date(this_year_to + '-' + to)
+    ) {
+      this_year_to++;
+      next_year_to++;
+      console.log(this_year_to);
+      console.log(next_year_to);
+    }
+
+    if (
+      now < new Date(this_year_from + '-' + from) &&
+      now < new Date(this_year_to + '-' + to)
+    ) {
+      // Period is in the future
+      return [
+        {
+          from: new Date(this_year_from + '-' + from)
+            .toISOString()
+            .substring(0, 10),
+          to: new Date(this_year_to + '-' + to).toISOString().substring(0, 10),
+        },
+      ];
+    } else if (
+      now > new Date(this_year_from + '-' + from) &&
+      now > new Date(this_year_to + '-' + to)
+    ) {
+      // Period is in the past
+      return [
+        {
+          from: new Date(next_year_from + '-' + from)
+            .toISOString()
+            .substring(0, 10),
+          to: new Date(next_year_to + '-' + to).toISOString().substring(0, 10),
+        },
+      ];
+    } else if (
+      // Currently in Period
+      now > new Date(this_year_from + '-' + from) &&
+      now < new Date(this_year_to + '-' + to)
+    ) {
+      return [
+        {
+          from: new Date(this_year_from + '-' + from)
+            .toISOString()
+            .substring(0, 10),
+          to: new Date(this_year_to + '-' + to).toISOString().substring(0, 10),
+        },
+        {
+          from: new Date(next_year_from + '-' + from)
+            .toISOString()
+            .substring(0, 10),
+          to: new Date(next_year_to + '-' + to).toISOString().substring(0, 10),
+        },
+      ];
+    }
+    console.log('nothing');
+    return [];
+  }
 }
 
 const months = {

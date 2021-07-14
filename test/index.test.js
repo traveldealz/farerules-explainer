@@ -8,7 +8,75 @@ import Explainer from './../src/explainer.js';
 
 import * as farerules from './data/farerules.js';
 
-describe('Test Properties', function () {
+describe('Test month-day period to year-month-day periods', () => {
+  it(`easy`, () =>
+    expect([
+      {
+        from: '2021-10-01',
+        to: '2021-10-30',
+      },
+    ]).to.eql(
+      Explainer.month_day_period_to_yearly_periods(
+        '10-01',
+        '10-30',
+        new Date('2021-07-14')
+      )
+    ));
+  console.log(
+    Explainer.month_day_period_to_yearly_periods(
+      '12-10',
+      '03-31',
+      new Date('2021-07-14')
+    )
+  );
+  it(`now in period`, () =>
+    expect([
+      {
+        from: '2021-07-01',
+        to: '2021-10-30',
+      },
+      {
+        from: '2022-07-01',
+        to: '2022-10-30',
+      },
+    ]).to.eql(
+      Explainer.month_day_period_to_yearly_periods(
+        '07-01',
+        '10-30',
+        new Date('2021-07-14')
+      )
+    ));
+
+  it(`period is this year in the past`, () =>
+    expect([
+      {
+        from: '2022-01-10',
+        to: '2022-03-31',
+      },
+    ]).to.eql(
+      Explainer.month_day_period_to_yearly_periods(
+        '01-10',
+        '03-31',
+        new Date('2021-07-14')
+      )
+    ));
+
+  it(`period to is in the next year`, () =>
+    expect([
+      {
+        from: '2021-12-10',
+        to: '2022-03-31',
+      },
+    ]).to.eql(
+      Explainer.month_day_period_to_yearly_periods(
+        '12-10',
+        '03-31',
+        new Date('2021-07-14')
+      )
+    ));
+});
+
+describe('Test Properties', () => {
   Object.entries(farerules).forEach(([key, { expected, text }]) => {
     let explainer = new Explainer(text);
     if (expected.issued_until)
