@@ -6,12 +6,8 @@ export default {
     max_stay: 12,
     booking_class: 'I',
     sunday_rule: 'and',
-    weekday_to: [
-      "MON","TUE", "WED", "SAT", "SUN"
-    ],
-    weekday_from: [
-      "TUE", "WED", "THU", "FRI", "SAT"
-    ],
+    weekday_to: ['MON', 'TUE', 'WED', 'SAT', 'SUN'],
+    weekday_from: ['TUE', 'WED', 'THU', 'FRI', 'SAT'],
     travel_period_from: [
       {
         from: '07-01',
@@ -46,8 +42,11 @@ export default {
       {
         from: '03-31',
         to: '04-17',
-      }
+      },
     ],
+    child_charge: 0.75,
+    infant_charge: 0.1,
+    infant_seat_charge: 0.75,
   },
   text: `General notes
 
@@ -638,4 +637,4 @@ Category 50: Application
    PASSENGER EXPENSES NOT ABSORBED BY CARRIER
    FARE DOES NOT APPLY FOR REFUND CALCULATION AFTER
    TRAVEL AT A HIGHER FARE.`,
-}
+};

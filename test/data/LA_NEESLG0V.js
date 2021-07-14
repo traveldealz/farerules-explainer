@@ -9,6 +9,9 @@ export default {
     max_stay: 12,
     travel_period: null,
     travel_period_blackout: null,
+    child_charge: 1,
+    infant_charge: 0.1,
+    infant_seat_charge: 1,
   },
   text: `General notes
 

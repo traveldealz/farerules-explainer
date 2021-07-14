@@ -146,6 +146,42 @@ export default class {
     return parseInt(found[1]);
   }
 
+  get child_charge() {
+    let found = this.text.match(
+      /ACCOMPANIED CHILD 2-11(?:\. ID REQUIRED|) - (?:CHARGE |)(\d{1,3}|NO DISCOUNT) (?:PERCENT OF THE FARE\.|OR )/
+    );
+
+    if (null === found || 2 !== found.length) {
+      return null;
+    }
+
+    return 'NO DISCOUNT' === found[1] ? 1 : parseInt(found[1]) / 100;
+  }
+
+  get infant_charge() {
+    let found = this.text.match(
+      /INFANT UNDER 2 WITHOUT A SEAT - CHARGE (\d{1,3}|NO DISCOUNT) PERCENT OF THE FARE\./
+    );
+
+    if (null === found || 2 !== found.length) {
+      return null;
+    }
+
+    return 'NO DISCOUNT' === found[1] ? 1 : parseInt(found[1]) / 100;
+  }
+
+  get infant_seat_charge() {
+    let found = this.text.match(
+      /INFANT UNDER 2 WITH A SEAT(?:\. ID REQUIRED|) - (?:CHARGE |)(\d{1,3}|NO DISCOUNT) (?:PERCENT OF THE FARE\.|OR )/
+    );
+
+    if (null === found || 2 !== found.length) {
+      return null;
+    }
+
+    return 'NO DISCOUNT' === found[1] ? 1 : parseInt(found[1]) / 100;
+  }
+
   explain(lang = 'en') {
     let result = '';
 

@@ -7,6 +7,9 @@ export default {
     travel_period: null,
     travel_period_blackout: null,
     sunday_rule: false,
+    child_charge: 0.75,
+    infant_charge: 0.1,
+    infant_seat_charge: 0.75,
   },
   text: `General notes
 
