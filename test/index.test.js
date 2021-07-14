@@ -63,5 +63,20 @@ describe('Test Properties', function () {
     if (expected.weekday_to)
       it(`${key}: weekday_to`, () =>
         expect(new Explainer(text).weekday_to).to.eql(expected.weekday_to));
+    if (expected.child_charge)
+      it(`${key}: child_charge`, () =>
+        expect(new Explainer(text).child_charge).to.equal(
+          expected.child_charge
+        ));
+    if (expected.infant_charge)
+      it(`${key}: infant_charge`, () =>
+        expect(new Explainer(text).infant_charge).to.equal(
+          expected.infant_charge
+        ));
+    if (expected.infant_seat_charge)
+      it(`${key}: infant_seat_charge`, () =>
+        expect(new Explainer(text).infant_seat_charge).to.equal(
+          expected.infant_seat_charge
+        ));
   });
 });

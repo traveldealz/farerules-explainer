@@ -18,6 +18,9 @@ export default {
       },
       { from: '2021-12-17', to: '2021-12-30' },
     ],
+    child_charge: 1,
+    infant_charge: 0.1,
+    infant_seat_charge: 1,
   },
   text: `General notes
 
