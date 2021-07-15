@@ -213,6 +213,23 @@ export default class {
               )}`
           )
           .join(', ')} `;
+      } else if (this.travel_commenced) {
+        if (this.travel_commenced.from && this.travel_commenced.to) {
+          result += `Abflüge zwischen dem ${this.#date_to_text(
+            this.travel_commenced.from,
+            lang
+          )} und ${this.#date_to_text(this.travel_commenced.to, lang)}`;
+        } else if (this.travel_commenced.from) {
+          result += `Abflüge nach dem ${this.#date_to_text(
+            this.travel_commenced.from,
+            lang
+          )}`;
+        } else if (this.travel_commenced.to) {
+          result += `Abflüge bis spätestens ${this.#date_to_text(
+            this.travel_commenced.to,
+            lang
+          )}`;
+        }
       } else {
         result += `Flüge ohne einen bestimmten Reisezeitraum.`;
       }
@@ -318,8 +335,6 @@ export default class {
     ) {
       this_year_to++;
       next_year_to++;
-      console.log(this_year_to);
-      console.log(next_year_to);
     }
 
     if (
