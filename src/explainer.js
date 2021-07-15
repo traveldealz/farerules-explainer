@@ -19,7 +19,6 @@ export default class {
     if (null === found || 3 !== found.length) {
       return null;
     }
-    console.log(found[1].split('/'));
 
     return found[1].split('/');
   }
@@ -29,7 +28,6 @@ export default class {
     if (null === found || 3 !== found.length) {
       return null;
     }
-    console.log(found[1].split('/'));
 
     return found[1].split('/');
   }
@@ -69,35 +67,29 @@ export default class {
   }
 
   get travel_period() {
-    // ToDo: In Seasonal Restrictions und Travel Period aufteilen
-    let found = this.text.match(
-      /VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/\s*BEFORE (\d{2}\w{3} \d{2})/
-    );
-    let found2 = this.#parse_travel_period(
+    let found = this.#parse_travel_period(
       /Seasonal restrictions\s*PERMITTED ([A-Z0-9 ]+) ON/
     );
-    if ((null === found || 3 !== found.length) && null === found2) {
+    if (null === found) {
       return null;
     }
 
-    if (found2 != null && found != null) {
-      return [
-        ...found2,
-        {
-          from: found[1] ? this.#parse_date(found[1]) : null,
-          to: found[2] ? this.#parse_date(found[2]) : null,
-        },
-      ];
-    } else if (found2 != null) {
-      return found2;
-    } else {
-      return [
-        {
-          from: found[1] ? this.#parse_date(found[1]) : null,
-          to: found[2] ? this.#parse_date(found[2]) : null,
-        },
-      ];
+    return found;
+  }
+
+  get travel_commenced() {
+    let found = this.text.match(
+      /VALID FOR TRAVEL COMMENCING (?:ON\/AFTER (\d{2}\w{3} \d{2}) AND |)ON\/\s*BEFORE (\d{2}\w{3} \d{2})/
+    );
+
+    if (null === found || 3 !== found.length) {
+      return null;
     }
+
+    return {
+      from: found[1] ? this.#parse_date(found[1]) : null,
+      to: found[2] ? this.#parse_date(found[2]) : null,
+    };
   }
 
   get travel_period_blackout() {
@@ -221,6 +213,23 @@ export default class {
               )}`
           )
           .join(', ')} `;
+      } else if (this.travel_commenced) {
+        if (this.travel_commenced.from && this.travel_commenced.to) {
+          result += `Abflüge zwischen dem ${this.#date_to_text(
+            this.travel_commenced.from,
+            lang
+          )} und ${this.#date_to_text(this.travel_commenced.to, lang)}`;
+        } else if (this.travel_commenced.from) {
+          result += `Abflüge nach dem ${this.#date_to_text(
+            this.travel_commenced.from,
+            lang
+          )}`;
+        } else if (this.travel_commenced.to) {
+          result += `Abflüge bis spätestens ${this.#date_to_text(
+            this.travel_commenced.to,
+            lang
+          )}`;
+        }
       } else {
         result += `Flüge ohne einen bestimmten Reisezeitraum.`;
       }
@@ -326,8 +335,6 @@ export default class {
     ) {
       this_year_to++;
       next_year_to++;
-      console.log(this_year_to);
-      console.log(next_year_to);
     }
 
     if (

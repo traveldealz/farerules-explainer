@@ -8,29 +8,83 @@ import Explainer from './../src/explainer.js';
 
 import * as farerules from './data/farerules.js';
 
+describe('Test Explain', () => {
+  let explain = new Explainer('');
+  Object.defineProperty(explain, 'issued_until', { value: '2021-07-22' });
+  Object.defineProperty(explain, 'min_stay', { value: 4 });
+  Object.defineProperty(explain, 'sunday_rule', { value: 'or' });
+  it(`issued_until`, () =>
+    expect(explain.explain('de')).to.contain(
+      'Buchbar ist der Tarif bis zum 22. Juli 2021'
+    ));
+  it(`minimum stay`, () =>
+    expect(explain.explain('de')).to.contain(
+      'Der Mindestaufenthalt beträgt 4 Tage'
+    ));
+  it(`sunday rule or`, () =>
+    expect(explain.explain('de')).to.contain(
+      'oder eine Nacht von Samstag auf Sonntag'
+    ));
+  it(`travel_commenced`, () => {
+    let ownexplain = new Explainer('');
+    Object.defineProperty(ownexplain, 'travel_commenced', {
+      value: {
+        from: '2021-07-01',
+        to: '2022-03-31',
+      },
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'für Abflüge zwischen dem 1. Juli 2021 und 31. März 2022'
+    );
+  });
+  it(`travel_commenced from`, () => {
+    let ownexplain = new Explainer('');
+    Object.defineProperty(ownexplain, 'travel_commenced', {
+      value: {
+        from: '2021-07-01',
+        to: null,
+      },
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'für Abflüge nach dem 1. Juli 2021'
+    );
+  });
+  it(`travel_commenced to`, () => {
+    let ownexplain = new Explainer('');
+    Object.defineProperty(ownexplain, 'travel_commenced', {
+      value: {
+        from: null,
+        to: '2022-03-31',
+      },
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'für Abflüge bis spätestens 31. März 2022'
+    );
+  });
+});
+
 describe('Test month-day period to year-month-day periods', () => {
   it(`easy`, () =>
-    expect([
-      {
-        from: '2021-10-01',
-        to: '2021-10-30',
-      },
-    ]).to.eql(
+    expect(
       Explainer.month_day_period_to_yearly_periods(
         '10-01',
         '10-30',
         new Date('2021-07-14')
       )
-    ));
-  console.log(
-    Explainer.month_day_period_to_yearly_periods(
-      '12-10',
-      '03-31',
-      new Date('2021-07-14')
-    )
-  );
+    ).to.eql([
+      {
+        from: '2021-10-01',
+        to: '2021-10-30',
+      },
+    ]));
   it(`now in period`, () =>
-    expect([
+    expect(
+      Explainer.month_day_period_to_yearly_periods(
+        '07-01',
+        '10-30',
+        new Date('2021-07-14')
+      )
+    ).to.eql([
       {
         from: '2021-07-01',
         to: '2021-10-30',
@@ -39,41 +93,35 @@ describe('Test month-day period to year-month-day periods', () => {
         from: '2022-07-01',
         to: '2022-10-30',
       },
-    ]).to.eql(
-      Explainer.month_day_period_to_yearly_periods(
-        '07-01',
-        '10-30',
-        new Date('2021-07-14')
-      )
-    ));
+    ]));
 
   it(`period is this year in the past`, () =>
-    expect([
-      {
-        from: '2022-01-10',
-        to: '2022-03-31',
-      },
-    ]).to.eql(
+    expect(
       Explainer.month_day_period_to_yearly_periods(
         '01-10',
         '03-31',
         new Date('2021-07-14')
       )
-    ));
-
-  it(`period to is in the next year`, () =>
-    expect([
+    ).to.eql([
       {
-        from: '2021-12-10',
+        from: '2022-01-10',
         to: '2022-03-31',
       },
-    ]).to.eql(
+    ]));
+
+  it(`period to is in the next year`, () =>
+    expect(
       Explainer.month_day_period_to_yearly_periods(
         '12-10',
         '03-31',
         new Date('2021-07-14')
       )
-    ));
+    ).to.eql([
+      {
+        from: '2021-12-10',
+        to: '2022-03-31',
+      },
+    ]));
 });
 
 describe('Test Properties', () => {
@@ -90,6 +138,9 @@ describe('Test Properties', () => {
     if (expected.travel_period)
       it(`${key}: travel_period`, () =>
         expect(explainer.travel_period).to.eql(expected.travel_period));
+    if (expected.travel_commenced)
+      it(`${key}: travel_commenced`, () =>
+        expect(explainer.travel_commenced).to.eql(expected.travel_commenced));
     if (expected.travel_period_blackout)
       it(`${key}: travel_period_blackout`, () =>
         expect(explainer.travel_period_blackout).to.eql(
