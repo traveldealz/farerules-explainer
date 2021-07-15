@@ -90,6 +90,9 @@ describe('Test Properties', () => {
     if (expected.travel_period)
       it(`${key}: travel_period`, () =>
         expect(explainer.travel_period).to.eql(expected.travel_period));
+    if (expected.travel_commenced)
+      it(`${key}: travel_commenced`, () =>
+        expect(explainer.travel_commenced).to.eql(expected.travel_commenced));
     if (expected.travel_period_blackout)
       it(`${key}: travel_period_blackout`, () =>
         expect(explainer.travel_period_blackout).to.eql(

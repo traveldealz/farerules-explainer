@@ -2,12 +2,10 @@ export default {
   expected: {
     issued_until: '2021-07-12',
     advanced_reservation_days: null,
-    travel_period: [
-      {
-        from: '2021-11-01',
-        to: '2022-03-31',
-      },
-    ],
+    travel_commenced: {
+      from: '2021-11-01',
+      to: '2022-03-31',
+    },
     travel_period_blackout: [
       {
         from: '2021-12-15',

@@ -16,11 +16,11 @@ export default {
         from: '08-16',
         to: '12-16',
       },
-      {
-        from: null,
-        to: '2022-03-31',
-      },
     ],
+    travel_commenced: {
+      from: null,
+      to: '2022-03-31',
+    },
     travel_period_blackout: null,
     child_charge: 0.75,
     infant_charge: 0.1,

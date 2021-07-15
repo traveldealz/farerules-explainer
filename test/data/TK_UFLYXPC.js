@@ -5,12 +5,10 @@ export default {
     min_stay: 4,
     sunday_rule: 'or',
     max_stay: 12,
-    travel_period: [
-      {
-        from: null,
-        to: '2022-03-11',
-      },
-    ],
+    travel_commenced: {
+      from: null,
+      to: '2022-03-11',
+    },
     travel_period_blackout: [
       {
         from: '2021-06-25',
