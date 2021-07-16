@@ -186,15 +186,25 @@ export default class {
 
       if (this.travel_period) {
         result += `Reisen zwischen dem ${this.travel_period
+          .map(({ from, to }) =>
+            this.constructor.month_day_period_to_yearly_periods(from, to)
+          )
+          .flat()
+          .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
               `${this.#date_to_text(period.from, lang)} ${
                 period.from == null ? '' : ' - '
               } ${this.#date_to_text(period.to, lang)}`
           )
-          .join(', ')} `;
+          .join(', ')}`;
       } else if (this.travel_period_from) {
         result += `Abflüge zwischen dem ${this.travel_period_from
+          .map(({ from, to }) =>
+            this.constructor.month_day_period_to_yearly_periods(from, to)
+          )
+          .flat()
+          .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
               `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
@@ -205,6 +215,11 @@ export default class {
           .join(', ')} `;
       } else if (this.travel_period_to) {
         result += `und Rückflüge zwischen dem ${this.travel_period_to
+          .map(({ from, to }) =>
+            this.constructor.month_day_period_to_yearly_periods(from, to)
+          )
+          .flat()
+          .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
               `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
@@ -247,22 +262,16 @@ export default class {
             : 'and' === this.sunday_rule
             ? ` und eine Nacht von Samstag auf Sonntag`
             : ''
-        }`;
-
-        if (this.max_stay) {
-          result += ` und maximal ${
-            1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
-          }. `;
-        } else {
-          result += `. `;
-        }
-      } else if (this.max_stay) {
-        result += `Der maximale Aufenthalt beträgt ${
-          1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
-        } . `;
+        }. `;
       }
 
-      result += `Die Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`;
+      if (this.max_stay) {
+        result += `Der maximale Aufenthalt beträgt ${
+          1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`
+        }. `;
+      }
+
+      result += `\nDie Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`;
       if (this.advanced_reservation_days) {
         result += ` und müssen mindestens ${this.advanced_reservation_days} Tage vor Abflug gebucht werden. `;
       } else {
