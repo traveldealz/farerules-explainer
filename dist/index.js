@@ -1,4 +1,5 @@
 import Explainer from './explainer.js';
+window.Explainer = Explainer;
 const template = document.createElement('template');
 template.innerHTML =
 /*html*/
