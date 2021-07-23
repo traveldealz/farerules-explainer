@@ -4,9 +4,13 @@ export default {
     advanced_reservation_days: 5,
     min_stay: 4,
     sunday_rule: 'or',
+    cabinclass:'Y',
+    no_luggage : true,
     booking_class: 'G',
     stopover: 'not permitted',
     max_stay: 3,
+    cancelable: 'no',
+    change: 'yes',
     travel_period: [
       {
         from: '01-03',

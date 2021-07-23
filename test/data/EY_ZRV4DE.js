@@ -3,7 +3,10 @@ export default {
     issued_until: '2021-08-02',
     advanced_reservation_days: 5,
     child_charge: 0.75,
+    cabinclass:null,
     infant_charge: 0.2,
+    cancelable: {currency: 'EUR', price: 465},
+    change: {'currency': 'EUR', 'price': 255},
     infant_seat_charge: 0.75,
   },
   text: `GENERAL INFORMATION

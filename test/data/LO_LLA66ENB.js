@@ -5,7 +5,11 @@ export default {
     min_stay: 6,
     sunday_rule: 'or',
     booking_class: 'L',
+    cabinclass:'Y',
+    no_luggage : true,
     stopover: 'not permitted',
+    cancelable: 'no',
+    change: 'yes',
     max_stay: 12,
     travel_period_from: [
       {

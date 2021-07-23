@@ -4,7 +4,10 @@ export default {
     advanced_reservation_days: null,
     min_stay: 4,
     sunday_rule: 'or',
+    cancelable: 'no',
     max_stay: 12,
+    change: 'yes',
+    cabinclass:'Y',
     travel_commenced: {
       from: null,
       to: '2022-03-11',

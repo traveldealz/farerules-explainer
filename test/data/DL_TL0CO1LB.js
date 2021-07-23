@@ -5,6 +5,9 @@ export default {
     min_stay: 6,
     sunday_rule: 'or',
     stopover: null,
+    change: 'no',
+    cancelable: 'no',
+    cabinclass:'Y',
     booking_class: null,
     max_stay: 12,
     travel_period_from: [

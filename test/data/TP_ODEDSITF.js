@@ -2,6 +2,9 @@ export default {
   expected: {
     issued_until: '2021-07-12',
     advanced_reservation_days: null,
+    cancelable: 'no',
+    change: {currency: 'EUR', price: 160},
+    cabinclass:'Y',
     travel_commenced: {
       from: '2021-11-01',
       to: '2022-03-31',

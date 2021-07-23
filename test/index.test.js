@@ -13,6 +13,7 @@ describe('Test Explain', () => {
   Object.defineProperty(explain, 'issued_until', { value: '2021-07-22' });
   Object.defineProperty(explain, 'min_stay', { value: 4 });
   Object.defineProperty(explain, 'sunday_rule', { value: 'or' });
+  console.log(explain.explain('de'))
   it(`issued_until`, () =>
     expect(explain.explain('de')).to.contain(
       'Buchbar ist der Tarif bis zum 22. Juli 2021'
@@ -186,5 +187,17 @@ describe('Test Properties', () => {
         expect(explainer.infant_seat_charge).to.equal(
           expected.infant_seat_charge
         ));
+    if (expected.cancelable)
+      it(`${key}: cancelable`, () =>
+          expect(explainer.cancelable).to.eql(expected.cancelable));
+    if (expected.change)
+      it(`${key}: change`, () =>
+          expect(explainer.change).to.eql(expected.change));
+    if (expected.cabinclass)
+      it(`${key}: cabinclass`, () =>
+          expect(explainer.cabinclass).to.eql(expected.cabinclass));
+    if (expected.no_luggage)
+      it(`${key}: no_luggage`, () =>
+          expect(explainer.no_luggage).to.eql(expected.no_luggage));
   });
 });

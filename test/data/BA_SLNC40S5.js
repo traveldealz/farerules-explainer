@@ -3,7 +3,10 @@ export default {
     issued_until: null,
     advanced_reservation_days: null,
     min_stay: null,
+    cabinclass:null,
     max_stay: 12,
+    cancelable: {currency: 'EUR', price: 180},
+    change: {'currency': 'EUR', 'price': 180},
     sunday_rule: true,
     travel_period_from: [
       {

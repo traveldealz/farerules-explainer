@@ -5,6 +5,9 @@ export default {
     min_stay: null,
     sunday_rule: null,
     booking_class: 'V',
+    cabinclass:'Y',
+    cancelable: {currency: 'USD', price: 180},
+    change: {currency: 'USD', price: 95},
     stopover: null,
     max_stay: 12,
     travel_period: [
