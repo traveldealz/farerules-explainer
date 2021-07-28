@@ -25,6 +25,78 @@ export default class {
     this.text = text.replaceAll(/\n+/g, ' ').replaceAll(/[ ]+/g, ' ');
   }
 
+  get cancelable() {
+    let found = this.text.match(/CANCELLATIONS (?:BEFORE DEPARTURE|ANY TIME) CHARGE (\w\w\w) (\d+)/);
+
+    if (null !== found && 3 === found.length) {
+      return {
+        currency: found[1],
+        price: parseInt(found[2])
+      };
+    }
+
+    found = this.text.match(/(?:BEFORE DEPARTURE|ANY TIME) TICKET IS NON-REFUNDABLE/);
+
+    if (null != found) {
+      return 'no';
+    }
+
+    found = this.text.match(/CANCELLATIONS (?:BEFORE DEPARTURE|ANY TIME) CANCELLATIONS PERMITTED/);
+
+    if (null != found) {
+      return 'yes';
+    }
+
+    return null;
+  }
+
+  get cabinclass() {
+    let found = this.text.match(/THESE FARES APPLY FOR ((?:\w+ )+)CLASS SERVICE/);
+
+    if (null !== found && 2 === found.length) {
+      switch (found[1]) {
+        case "ECONOMY ":
+          return 'Y';
+
+        case "BUSINESS ":
+          return 'C';
+
+        case 'PREMIUM ECONOMY ':
+          return 'W';
+
+        case 'FIRST ':
+          return 'F';
+      }
+    }
+
+    return null;
+  }
+
+  get change() {
+    let found = this.text.match(/CHANGES (?:BEFORE DEPARTURE|ANY TIME) CHARGE (\w\w\w) (\d+)/);
+
+    if (null !== found && 3 === found.length) {
+      return {
+        currency: found[1],
+        price: parseInt(found[2])
+      };
+    }
+
+    found = this.text.match(/(?:BEFORE DEPARTURE|ANY TIME) CHANGES NOT PERMITTED/);
+
+    if (null != found) {
+      return 'no';
+    }
+
+    found = this.text.match(/CHANGES (?:BEFORE DEPARTURE|ANY TIME) CHANGES PERMITTED/);
+
+    if (null != found) {
+      return 'yes';
+    }
+
+    return null;
+  }
+
   get booking_class() {
     let found = this.text.match(/General notes.*?\s([A-Z])\s/);
 
@@ -83,6 +155,11 @@ export default class {
     return found ? 'free' : found2 ? 'not permitted' : null;
   }
 
+  get no_luggage() {
+    let found = this.text.match(/(?:NO|ZERO) BAGGAGE ALLOWANCE MUST BE /);
+    return found != null;
+  }
+
   get travel_period() {
     let found = _classPrivateFieldLooseBase(this, _parse_travel_period)[_parse_travel_period](/Seasonal restrictions\s*PERMITTED ([A-Z0-9 ]+) ON/);
 
@@ -111,11 +188,11 @@ export default class {
   }
 
   get travel_period_from() {
-    return _classPrivateFieldLooseBase(this, _parse_travel_period)[_parse_travel_period](/FROM [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/);
+    return _classPrivateFieldLooseBase(this, _parse_travel_period)[_parse_travel_period](/(?:FROM [A-Z ]+|OUTBOUND) - PERMITTED ([A-Z0-9 ]+) FOR EACH/);
   }
 
   get travel_period_to() {
-    return _classPrivateFieldLooseBase(this, _parse_travel_period)[_parse_travel_period](/TO [A-Z ]+ - PERMITTED ([A-Z0-9 ]+) FOR EACH/);
+    return _classPrivateFieldLooseBase(this, _parse_travel_period)[_parse_travel_period](/(?:TO [A-Z ]+|INBOUND) - PERMITTED ([A-Z0-9 ]+) FOR EACH/);
   }
 
   get min_stay() {
