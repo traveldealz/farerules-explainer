@@ -13,7 +13,7 @@ describe('Test Explain', () => {
   Object.defineProperty(explain, 'issued_until', { value: '2021-07-22' });
   Object.defineProperty(explain, 'min_stay', { value: 4 });
   Object.defineProperty(explain, 'sunday_rule', { value: 'or' });
-  console.log(explain.explain('de'))
+  console.log(explain.explain('de'));
   it(`issued_until`, () =>
     expect(explain.explain('de')).to.contain(
       'Buchbar ist der Tarif bis zum 22. Juli 2021'
@@ -60,6 +60,94 @@ describe('Test Explain', () => {
     });
     expect(ownexplain.explain('de')).to.contain(
       'für Abflüge bis spätestens 31. März 2022'
+    );
+  });
+  it(`travel_period_from`, () => {
+    let ownexplain = new Explainer('');
+    ownexplain.now = new Date('2021-07-28');
+    Object.defineProperty(ownexplain, 'travel_period_from', {
+      value: [
+        {
+          from: '2020-10-18',
+          to: '2021-12-22',
+        },
+        {
+          from: '2021-12-28',
+          to: '2022-04-08',
+        },
+      ],
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'für Abflüge zwischen dem 18. Oktober 2020 - 22. Dezember 2021, 28. Dezember 2021 - 8. April 2022'
+    );
+  });
+  it(`travel_period_to`, () => {
+    let ownexplain = new Explainer('');
+    ownexplain.now = new Date('2021-07-28');
+    Object.defineProperty(ownexplain, 'travel_period_to', {
+      value: [
+        {
+          from: '2020-10-18',
+          to: '2021-12-25',
+        },
+        {
+          from: '2022-01-10',
+          to: '2022-04-15',
+        },
+      ],
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'Rückflüge zwischen dem 18. Oktober 2020 - 25. Dezember 2021, 10. Januar 2022 - 15. April 2022'
+    );
+  });
+  it(`travel_period_from & _to`, () => {
+    let ownexplain = new Explainer('');
+    ownexplain.now = new Date('2021-07-28');
+    Object.defineProperty(ownexplain, 'travel_period_from', {
+      value: [
+        {
+          from: '2020-10-18',
+          to: '2021-12-22',
+        },
+        {
+          from: '2021-12-28',
+          to: '2022-04-08',
+        },
+      ],
+    });
+    Object.defineProperty(ownexplain, 'travel_period_to', {
+      value: [
+        {
+          from: '2020-10-18',
+          to: '2021-12-25',
+        },
+        {
+          from: '2022-01-10',
+          to: '2022-04-15',
+        },
+      ],
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'für Abflüge zwischen dem 18. Oktober 2020 - 22. Dezember 2021, 28. Dezember 2021 - 8. April 2022 und Rückflüge zwischen dem 18. Oktober 2020 - 25. Dezember 2021, 10. Januar 2022 - 15. April 2022'
+    );
+  });
+  it(`travel_period_from in the past`, () => {
+    let ownexplain = new Explainer('');
+    ownexplain.now = new Date('2021-07-28');
+    Object.defineProperty(ownexplain, 'travel_period_from', {
+      value: [
+        {
+          from: '2020-10-18',
+          to: '2021-07-01',
+        },
+        {
+          from: '2021-12-28',
+          to: '2022-04-08',
+        },
+      ],
+    });
+    expect(ownexplain.explain('de')).to.contain(
+      'für Abflüge zwischen dem 28. Dezember 2021 - 8. April 2022'
     );
   });
 });
@@ -189,15 +277,15 @@ describe('Test Properties', () => {
         ));
     if (expected.cancelable)
       it(`${key}: cancelable`, () =>
-          expect(explainer.cancelable).to.eql(expected.cancelable));
+        expect(explainer.cancelable).to.eql(expected.cancelable));
     if (expected.change)
       it(`${key}: change`, () =>
-          expect(explainer.change).to.eql(expected.change));
+        expect(explainer.change).to.eql(expected.change));
     if (expected.cabinclass)
       it(`${key}: cabinclass`, () =>
-          expect(explainer.cabinclass).to.eql(expected.cabinclass));
+        expect(explainer.cabinclass).to.eql(expected.cabinclass));
     if (expected.no_luggage)
       it(`${key}: no_luggage`, () =>
-          expect(explainer.no_luggage).to.eql(expected.no_luggage));
+        expect(explainer.no_luggage).to.eql(expected.no_luggage));
   });
 });
