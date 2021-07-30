@@ -22,6 +22,7 @@ export default class {
       value: _parse_travel_period2
     });
     this.text = '';
+    this.now = new Date();
     this.text = text.replaceAll(/\n+/g, ' ').replaceAll(/[ ]+/g, ' ');
   }
 
@@ -55,10 +56,10 @@ export default class {
 
     if (null !== found && 2 === found.length) {
       switch (found[1]) {
-        case "ECONOMY ":
+        case 'ECONOMY ':
           return 'Y';
 
-        case "BUSINESS ":
+        case 'BUSINESS ':
           return 'C';
 
         case 'PREMIUM ECONOMY ':
@@ -267,17 +268,24 @@ export default class {
         result += `Reisen zwischen dem ${this.travel_period.map(({
           from,
           to
-        }) => this.constructor.month_day_period_to_yearly_periods(from, to)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} ${period.from == null ? '' : ' - '} ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')}`;
+        }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} ${period.from == null ? '' : ' - '} ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')}`;
       } else if (this.travel_period_from) {
         result += `Abflüge zwischen dem ${this.travel_period_from.map(({
           from,
           to
-        }) => this.constructor.month_day_period_to_yearly_periods(from, to)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+        }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+
+        if (this.travel_period_to) {
+          result += `und Rückflüge zwischen dem ${this.travel_period_to.map(({
+            from,
+            to
+          }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+        }
       } else if (this.travel_period_to) {
-        result += `und Rückflüge zwischen dem ${this.travel_period_to.map(({
+        result += `Rückflüge zwischen dem ${this.travel_period_to.map(({
           from,
           to
-        }) => this.constructor.month_day_period_to_yearly_periods(from, to)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+        }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
       } else if (this.travel_commenced) {
         if (this.travel_commenced.from && this.travel_commenced.to) {
           result += `Abflüge zwischen dem ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.from, lang)} und ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.to, lang)}`;
@@ -324,6 +332,17 @@ export default class {
   }
 
   static month_day_period_to_yearly_periods(from, to, now = new Date()) {
+    if (10 === from.length && 10 === to.length) {
+      if (now > new Date(from) && now > new Date(to)) {
+        return [];
+      }
+
+      return [{
+        from,
+        to
+      }];
+    }
+
     let this_year_from, this_year_to;
     this_year_from = this_year_to = now.getFullYear();
     let next_year_from, next_year_to;
