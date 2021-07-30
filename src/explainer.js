@@ -1,34 +1,43 @@
 export default class {
   text = '';
+  now = new Date();
 
   constructor(text) {
     this.text = text.replaceAll(/\n+/g, ' ').replaceAll(/[ ]+/g, ' ');
   }
 
-  get cancelable(){
-    let found = this.text.match(/CANCELLATIONS (?:BEFORE DEPARTURE|ANY TIME) CHARGE (\w\w\w) (\d+)/);
+  get cancelable() {
+    let found = this.text.match(
+      /CANCELLATIONS (?:BEFORE DEPARTURE|ANY TIME) CHARGE (\w\w\w) (\d+)/
+    );
     if (null !== found && 3 === found.length) {
-      return {currency: found[1], price: parseInt(found[2])}
+      return { currency: found[1], price: parseInt(found[2]) };
     }
-    found = this.text.match(/(?:BEFORE DEPARTURE|ANY TIME) TICKET IS NON-REFUNDABLE/);
+    found = this.text.match(
+      /(?:BEFORE DEPARTURE|ANY TIME) TICKET IS NON-REFUNDABLE/
+    );
     if (null != found) {
       return 'no';
     }
-    found = this.text.match(/CANCELLATIONS (?:BEFORE DEPARTURE|ANY TIME) CANCELLATIONS PERMITTED/);
+    found = this.text.match(
+      /CANCELLATIONS (?:BEFORE DEPARTURE|ANY TIME) CANCELLATIONS PERMITTED/
+    );
     if (null != found) {
       return 'yes';
     }
 
-    return null
+    return null;
   }
 
   get cabinclass() {
-    let found = this.text.match(/THESE FARES APPLY FOR ((?:\w+ )+)CLASS SERVICE/);
+    let found = this.text.match(
+      /THESE FARES APPLY FOR ((?:\w+ )+)CLASS SERVICE/
+    );
     if (null !== found && 2 === found.length) {
       switch (found[1]) {
-        case "ECONOMY ":
+        case 'ECONOMY ':
           return 'Y';
-        case "BUSINESS ":
+        case 'BUSINESS ':
           return 'C';
         case 'PREMIUM ECONOMY ':
           return 'W';
@@ -36,24 +45,30 @@ export default class {
           return 'F';
       }
     }
-    return null
+    return null;
   }
 
-    get change(){
-    let found = this.text.match(/CHANGES (?:BEFORE DEPARTURE|ANY TIME) CHARGE (\w\w\w) (\d+)/);
+  get change() {
+    let found = this.text.match(
+      /CHANGES (?:BEFORE DEPARTURE|ANY TIME) CHARGE (\w\w\w) (\d+)/
+    );
     if (null !== found && 3 === found.length) {
-      return {currency: found[1], price: parseInt(found[2])}
+      return { currency: found[1], price: parseInt(found[2]) };
     }
-    found = this.text.match(/(?:BEFORE DEPARTURE|ANY TIME) CHANGES NOT PERMITTED/);
+    found = this.text.match(
+      /(?:BEFORE DEPARTURE|ANY TIME) CHANGES NOT PERMITTED/
+    );
     if (null != found) {
       return 'no';
     }
-    found = this.text.match(/CHANGES (?:BEFORE DEPARTURE|ANY TIME) CHANGES PERMITTED/);
+    found = this.text.match(
+      /CHANGES (?:BEFORE DEPARTURE|ANY TIME) CHANGES PERMITTED/
+    );
     if (null != found) {
       return 'yes';
     }
 
-    return null
+    return null;
   }
 
   get booking_class() {
@@ -243,7 +258,11 @@ export default class {
       if (this.travel_period) {
         result += `Reisen zwischen dem ${this.travel_period
           .map(({ from, to }) =>
-            this.constructor.month_day_period_to_yearly_periods(from, to)
+            this.constructor.month_day_period_to_yearly_periods(
+              from,
+              to,
+              this.now
+            )
           )
           .flat()
           .sort((a, b) => a.from > b.from)
@@ -257,7 +276,11 @@ export default class {
       } else if (this.travel_period_from) {
         result += `Abflüge zwischen dem ${this.travel_period_from
           .map(({ from, to }) =>
-            this.constructor.month_day_period_to_yearly_periods(from, to)
+            this.constructor.month_day_period_to_yearly_periods(
+              from,
+              to,
+              this.now
+            )
           )
           .flat()
           .sort((a, b) => a.from > b.from)
@@ -269,10 +292,34 @@ export default class {
               )}`
           )
           .join(', ')} `;
+        if (this.travel_period_to) {
+          result += `und Rückflüge zwischen dem ${this.travel_period_to
+            .map(({ from, to }) =>
+              this.constructor.month_day_period_to_yearly_periods(
+                from,
+                to,
+                this.now
+              )
+            )
+            .flat()
+            .sort((a, b) => a.from > b.from)
+            .map(
+              (period) =>
+                `${this.#date_to_text(
+                  period.from,
+                  lang
+                )} - ${this.#date_to_text(period.to, lang)}`
+            )
+            .join(', ')} `;
+        }
       } else if (this.travel_period_to) {
-        result += `und Rückflüge zwischen dem ${this.travel_period_to
+        result += `Rückflüge zwischen dem ${this.travel_period_to
           .map(({ from, to }) =>
-            this.constructor.month_day_period_to_yearly_periods(from, to)
+            this.constructor.month_day_period_to_yearly_periods(
+              from,
+              to,
+              this.now
+            )
           )
           .flat()
           .sort((a, b) => a.from > b.from)
@@ -389,6 +436,13 @@ export default class {
   }
 
   static month_day_period_to_yearly_periods(from, to, now = new Date()) {
+    if (10 === from.length && 10 === to.length) {
+      if (now > new Date(from) && now > new Date(to)) {
+        return [];
+      }
+      return [{ from, to }];
+    }
+
     let this_year_from, this_year_to;
     this_year_from = this_year_to = now.getFullYear();
     let next_year_from, next_year_to;
