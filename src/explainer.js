@@ -349,17 +349,33 @@ export default class {
           )}`;
         }
       } else {
-        result += `Flüge ohne einen bestimmten Reisezeitraum.`;
+        result += `Flüge ohne einen bestimmten Reisezeitraum`;
       }
 
-      result += `. `;
+      result += '.';
+
+      if(this.weekday_to){
+        result += ' Allerdings darf der Abflug nur an einem '
+        for(var i = 0; i< this.weekday_to.length-1; i++){
+          result += tage[this.weekday_to[i]] + ', ';
+        }
+        result += 'oder ' + tage[this.weekday_to[this.weekday_to.length-1]] + ' stattfinden.'
+      }
+
+      if(this.weekday_from){
+        result += ' Der Rückflug darf nur an einem '
+        for(var i = 0; i< this.weekday_from.length-1; i++){
+          result += tage[this.weekday_from[i]] + ', ';
+        }
+        result += 'oder ' + tage[this.weekday_from[this.weekday_from.length-1]] + ' stattfinden.'
+      }
 
       if (null === this.issued_until) {
-        result += `Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
+        result += ` Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
       }
 
       if (this.min_stay) {
-        result += `Der Mindestaufenthalt beträgt ${this.min_stay} Tage${
+        result += ` Der Mindestaufenthalt beträgt ${this.min_stay} Tage${
           'or' === this.sunday_rule
             ? ` oder eine Nacht von Samstag auf Sonntag`
             : 'and' === this.sunday_rule
@@ -374,17 +390,45 @@ export default class {
         }. `;
       }
 
-      result += `\nDie Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`;
+      result += '\nDie '
+      switch (this.cabinclass) {
+        case 'Y':
+          result += 'Economy-Class-';
+          break;
+        case 'C':
+          result += 'Business-Class-';
+          break;
+        case 'W':
+          result += 'Premium-Economy-Class-';
+          break;
+        case 'F':
+          result += 'First-Class-';
+          break;
+      }
+      result += `Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`;
       if (this.advanced_reservation_days) {
         result += ` und müssen mindestens ${this.advanced_reservation_days} Tage vor Abflug gebucht werden. `;
       } else {
         result += `.`;
       }
 
+      this.no_luggage ? result += 'Bei diesem Tarif ist kein Aufgabegepäck inklusive.' : {};
+
       if ('free' === this.stopover) {
-        result += `Mindestens ein kostenloser Stopover ist erlaubt.`;
+        result += ` Mindestens ein kostenloser Stopover ist erlaubt.`;
       } else if ('not permitted' === this.stopover) {
-        result += `Stopover sind nicht erlaubt.`;
+        result += ` Stopover sind nicht erlaubt.`;
+      }
+
+      if(this.cancelable != null){
+        result += ' Diese Flüge lassen sich ';
+        this.cancelable === 'no' ? result += 'nicht' : this.cancelable === 'yes' ? result += 'kostenlos' : result += 'für '  + this.cancelable.price + ' ' + this.cancelable.currency
+      result += ' stornieren'
+      }
+      if(this.change != null){
+        (this.change === 'no' && this.cancelable === 'no') || (this.change === 'yes' && this.cancelable === 'yes') ? result += ' und auch' : result += ' aber'
+        result += ' umbuchen lassen sich die Flüge ';
+        this.change === 'no' ? result += 'nicht.' : this.change === 'yes' ? result += 'ohne Umbuchungsgebühr.' : result += 'für ' + this.cancelable.price + ' ' + this.cancelable.currency +'.'
       }
     } else {
       // Fallback to en
@@ -520,4 +564,14 @@ const months = {
   OCT: '10',
   NOV: '11',
   DEC: '12',
+};
+
+const tage = {
+  MON: 'Montag',
+  TUE: 'Dienstag',
+  WED: 'Mittwoch',
+  THU: 'Donnerstag',
+  FRI: 'Freitag',
+  SAT: 'Samstag',
+  SUN: 'Sonntag',
 };

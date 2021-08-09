@@ -10,22 +10,23 @@ import * as farerules from './data/farerules.js';
 
 describe('Test Explain', () => {
   let explain = new Explainer('');
-  Object.defineProperty(explain, 'issued_until', { value: '2021-07-22' });
-  Object.defineProperty(explain, 'min_stay', { value: 4 });
-  Object.defineProperty(explain, 'sunday_rule', { value: 'or' });
+  Object.defineProperty(explain, 'issued_until', {value: '2021-07-22'});
+  Object.defineProperty(explain, 'min_stay', {value: 4});
+  Object.defineProperty(explain, 'sunday_rule', {value: 'or'});
+  Object.defineProperty(explain, 'booking_class', {value: 'K'});
   console.log(explain.explain('de'));
   it(`issued_until`, () =>
-    expect(explain.explain('de')).to.contain(
-      'Buchbar ist der Tarif bis zum 22. Juli 2021'
-    ));
+      expect(explain.explain('de')).to.contain(
+          'Buchbar ist der Tarif bis zum 22. Juli 2021'
+      ));
   it(`minimum stay`, () =>
-    expect(explain.explain('de')).to.contain(
-      'Der Mindestaufenthalt beträgt 4 Tage'
-    ));
+      expect(explain.explain('de')).to.contain(
+          'Der Mindestaufenthalt beträgt 4 Tage'
+      ));
   it(`sunday rule or`, () =>
-    expect(explain.explain('de')).to.contain(
-      'oder eine Nacht von Samstag auf Sonntag'
-    ));
+      expect(explain.explain('de')).to.contain(
+          'oder eine Nacht von Samstag auf Sonntag'
+      ));
   it(`travel_commenced`, () => {
     let ownexplain = new Explainer('');
     Object.defineProperty(ownexplain, 'travel_commenced', {
@@ -35,7 +36,7 @@ describe('Test Explain', () => {
       },
     });
     expect(ownexplain.explain('de')).to.contain(
-      'für Abflüge zwischen dem 1. Juli 2021 und 31. März 2022'
+        'für Abflüge zwischen dem 1. Juli 2021 und 31. März 2022'
     );
   });
   it(`travel_commenced from`, () => {
@@ -47,7 +48,7 @@ describe('Test Explain', () => {
       },
     });
     expect(ownexplain.explain('de')).to.contain(
-      'für Abflüge nach dem 1. Juli 2021'
+        'für Abflüge nach dem 1. Juli 2021'
     );
   });
   it(`travel_commenced to`, () => {
@@ -59,7 +60,7 @@ describe('Test Explain', () => {
       },
     });
     expect(ownexplain.explain('de')).to.contain(
-      'für Abflüge bis spätestens 31. März 2022'
+        'für Abflüge bis spätestens 31. März 2022'
     );
   });
   it(`travel_period_from`, () => {
@@ -78,7 +79,7 @@ describe('Test Explain', () => {
       ],
     });
     expect(ownexplain.explain('de')).to.contain(
-      'für Abflüge zwischen dem 18. Oktober 2020 - 22. Dezember 2021, 28. Dezember 2021 - 8. April 2022'
+        'für Abflüge zwischen dem 18. Oktober 2020 - 22. Dezember 2021, 28. Dezember 2021 - 8. April 2022'
     );
   });
   it(`travel_period_to`, () => {
@@ -97,7 +98,7 @@ describe('Test Explain', () => {
       ],
     });
     expect(ownexplain.explain('de')).to.contain(
-      'Rückflüge zwischen dem 18. Oktober 2020 - 25. Dezember 2021, 10. Januar 2022 - 15. April 2022'
+        'Rückflüge zwischen dem 18. Oktober 2020 - 25. Dezember 2021, 10. Januar 2022 - 15. April 2022'
     );
   });
   it(`travel_period_from & _to`, () => {
@@ -128,7 +129,7 @@ describe('Test Explain', () => {
       ],
     });
     expect(ownexplain.explain('de')).to.contain(
-      'für Abflüge zwischen dem 18. Oktober 2020 - 22. Dezember 2021, 28. Dezember 2021 - 8. April 2022 und Rückflüge zwischen dem 18. Oktober 2020 - 25. Dezember 2021, 10. Januar 2022 - 15. April 2022'
+        'für Abflüge zwischen dem 18. Oktober 2020 - 22. Dezember 2021, 28. Dezember 2021 - 8. April 2022 und Rückflüge zwischen dem 18. Oktober 2020 - 25. Dezember 2021, 10. Januar 2022 - 15. April 2022'
     );
   });
   it(`travel_period_from in the past`, () => {
@@ -147,7 +148,85 @@ describe('Test Explain', () => {
       ],
     });
     expect(ownexplain.explain('de')).to.contain(
-      'für Abflüge zwischen dem 28. Dezember 2021 - 8. April 2022'
+        'für Abflüge zwischen dem 28. Dezember 2021 - 8. April 2022'
+    );
+  });
+  it(`kostenlos stornierbar`, () => {
+    Object.defineProperty(explain, 'cancelable', {value: 'yes', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Diese Flüge lassen sich kostenlos stornieren'
+    );
+  });
+  it(`nicht stornierbar`, () => {
+    Object.defineProperty(explain, 'cancelable', {value: 'no', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Diese Flüge lassen sich nicht stornieren'
+    );
+  });
+  it(`kostenpflichtig stornierbar`, () => {
+    Object.defineProperty(explain, 'cancelable', {value: {currency: 'EUR', price: 200}, configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Diese Flüge lassen sich für 200 EUR stornieren'
+    );
+  });
+  it(`kostenlos umbuchbar`, () => {
+    Object.defineProperty(explain, 'change', {value: 'yes', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'umbuchen lassen sich die Flüge ohne Umbuchungsgebühr'
+    );
+  });
+  it(`nicht umbuchbar`, () => {
+    Object.defineProperty(explain, 'change', {value: 'no', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'umbuchen lassen sich die Flüge nicht.'
+    );
+  });
+  it(`kostenpflichtig umbuchbar`, () => {
+    Object.defineProperty(explain, 'change', {value: {currency: 'EUR', price: 200}, configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'umbuchen lassen sich die Flüge für 200 EUR.'
+    );
+  });
+  it(`Eco`, () => {
+    Object.defineProperty(explain, 'cabinclass', {value: 'Y', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Die Economy-Class-Tickets werden in Buchungsklasse K ausgestellt'
+    );
+  });
+  it(`Premium Eco`, () => {
+    Object.defineProperty(explain, 'cabinclass', {value: 'W', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Die Premium-Economy-Class-Tickets werden in Buchungsklasse K ausgestellt'
+    );
+  });
+  it(`Business`, () => {
+    Object.defineProperty(explain, 'cabinclass', {value: 'C', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Die Business-Class-Tickets werden in Buchungsklasse K ausgestellt'
+    );
+  });
+  it(`First`, () => {
+    Object.defineProperty(explain, 'cabinclass', {value: 'F', configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Die First-Class-Tickets werden in Buchungsklasse K ausgestellt'
+    );
+  });
+  it(`Kein Gepäck`, () => {
+    Object.defineProperty(explain, 'no_luggage', {value: true, configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Bei diesem Tarif ist kein Aufgabegepäck inklusive.'
+    );
+  });
+  it(`Hinflug-Wochentage`, () => {
+    Object.defineProperty(explain, 'weekday_to', {value: ['MON', 'TUE', 'WED'], configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Allerdings darf der Abflug nur an einem Montag, Dienstag, oder Mittwoch stattfinden.'
+    );
+  });
+  it(`Rückflug-Wochentage`, () => {
+    Object.defineProperty(explain, 'weekday_from', {value: ['SUN', 'TUE', 'WED'], configurable: true});
+    expect(explain.explain('de')).to.contain(
+        'Der Rückflug darf nur an einem Sonntag, Dienstag, oder Mittwoch stattfinden.'
     );
   });
 });
