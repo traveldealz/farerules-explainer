@@ -10,7 +10,7 @@ export default {
     booking_class: 'X',
     max_stay: 3,
     stopover: 'not permitted',
-    sunday_rule: 'or',
+    sunday_rule: true,
     travel_period: [
       {
         from: '01-06',

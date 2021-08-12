@@ -3,7 +3,7 @@ export default {
     issued_until: '2021-07-14',
     advanced_reservation_days: null,
     min_stay: 4,
-    sunday_rule: 'or',
+    sunday_rule: true,
     cancelable: 'no',
     max_stay: 12,
     change: 'yes',

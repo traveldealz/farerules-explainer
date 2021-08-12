@@ -8,7 +8,7 @@ export default {
     cabinclass:'C',
     cancelable: 'no',
     change: {'currency': 'EUR', 'price': 125},
-    sunday_rule: 'and',
+    sunday_rule: true,
     weekday_to: ['MON', 'TUE', 'WED', 'SAT', 'SUN'],
     weekday_from: ['TUE', 'WED', 'THU', 'FRI', 'SAT'],
     travel_period_from: [

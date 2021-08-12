@@ -363,6 +363,9 @@ describe('Test Properties', () => {
     if (expected.cabinclass)
       it(`${key}: cabinclass`, () =>
         expect(explainer.cabinclass).to.eql(expected.cabinclass));
+    if (expected.weekday)
+      it(`${key}: weekday`, () =>
+          expect(explainer.weekday).to.eql(expected.weekday));
     if (expected.no_luggage)
       it(`${key}: no_luggage`, () =>
         expect(explainer.no_luggage).to.eql(expected.no_luggage));

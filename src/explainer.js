@@ -8,15 +8,22 @@ export default class {
 
   listForm() {
     let list = '<ul>';
-    list += '<li>Issued Until: ' + this.issued_until + '</li>';
+    this.issued_until != null ? list += '<li>Issued Until: ' + this.issued_until + '</li>' : {};
     this.min_stay != null
-        ? (list += '<li>Min. Stay: ' + this.min_stay + ' days</li>')
+        ? (list += '<li>Min. Stay: ' + this.min_stay + ' days')
         : {};
-    this.sunday_rule != null
-        ? (list += '<li>Sunday Rule: yes</li>')
-        : (list += '<li>Sunday Rule: no</li>');
-    list += '<li>Max. Stay: ' + this.max_stay + '</li>';
-    list += '<li>Booking Class: ' + this.booking_class + '</li>';
+    if(this.sunday_rule != null){
+       if(this.min_stay != null) {
+         (list += ' or a Sunday </li>')
+       }else{
+         list += '<li>Min. Stay: A Sunday</li>'
+       }
+    }else{
+       if(this.min_stay != null) {
+         (list += '</li>')
+       }}
+    this.max_stay != null ? list += '<li>Max. Stay: ' + this.max_stay + ' months</li>' : {};
+    this.booking_class != null ? list += '<li>Booking Class: ' + this.booking_class + '</li>' : {};
     this.cancelable === 'yes' || this.cancelable === 'no'
         ? (list += '<li>Cancelable: ' + this.cancelable + '</li>')
         : (list +=
@@ -31,9 +38,10 @@ export default class {
         this.change.currency +
         this.change.price +
         '</li>');
-    list += '<li>Cabin Class: ' + this.cabinclass + '</li>';
-    list += '<li>Weekday To: ' + this.weekday_to + '</li>';
-    list += '<li>Weekday From: ' + this.weekday_from + '</li>';
+    this.cabinclass != null ? list += '<li>Cabin Class: ' + this.cabinclass + '</li>' : {};
+    this.weekday_to != null ? list += '<li>Weekday To: ' + this.weekday_to + '</li>' : {};
+    this.weekday_from != null ? list += '<li>Weekday From: ' + this.weekday_from + '</li>' : {};
+    this.weekday != null ? list += '<li>Weekday: ' + this.weekday.from + ' - ' + this.weekday.until +'</li>' : {};
     this.advanced_reservation_days != null
         ? (list +=
         '<li>Advanced Reservation : ' +
@@ -196,6 +204,14 @@ export default class {
     return found[1];
   }
 
+  get weekday(){
+    let found = this.text.match(/PERMITTED (\w\w\w) THROUGH (\w\w\w)/);
+    if (null === found || 3 !== found.length) {
+      return null;
+    }
+    return {from: found[1], until: found[2]}
+  }
+
   get weekday_to() {
     let found = this.text.match(/TO [A-Z ]+ - PERMITTED ((\w\w\w\/)+\w\w\w)/);
     if (null === found || 3 !== found.length) {
@@ -310,9 +326,10 @@ export default class {
     if (found === null) {
       return null;
     }
-    let findand = this.text.match(/AND - TRAVEL FROM/);
-    let findor = this.text.match(/OR - TRAVEL FROM/);
-    return findand != null ? 'and' : findor != null ? 'or' : true;
+    return true
+    //let findand = this.text.match(/AND - TRAVEL FROM/);
+    //let findor = this.text.match(/OR - TRAVEL FROM/);
+    //return findand != null ? 'and' : findor != null ? 'or' : true;
   }
 
   get max_stay() {
@@ -492,16 +509,18 @@ export default class {
             ' stattfinden.';
       }
 
+      if(this.weekday){
+        result += ' Dieses Angebot gilt nur für Flüge zwischen ' + tage[this.weekday.from] + ' und ' + tage[this.weekday.until] + '.';
+      }
+
       if (null === this.issued_until) {
         result += ` Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
       }
 
       if (this.min_stay) {
         result += ` Der Mindestaufenthalt beträgt ${this.min_stay} Tage${
-            'or' === this.sunday_rule
+            true === this.sunday_rule
                 ? ` oder eine Nacht von Samstag auf Sonntag`
-                : 'and' === this.sunday_rule
-                ? ` und eine Nacht von Samstag auf Sonntag`
                 : ''
         }. `;
       }
@@ -696,16 +715,18 @@ export default class {
             'or ' + days[this.weekday_from[this.weekday_from.length - 1]] + '.';
       }
 
+      if(this.weekday){
+        result += ' This deal is only available for flights departing from ' + days[this.weekday.from] + ' to ' + days[this.weekday.until] + '.';
+      }
+
       if (null === this.issued_until) {
         result += ` The fare has no expiration date and can thus be withdrawn anytime. `;
       }
 
       if (this.min_stay) {
         result += ` The minimum stay requirement is of ${this.min_stay} days${
-            'or' === this.sunday_rule
+            true === this.sunday_rule
                 ? ` (or a Sunday)`
-                : 'and' === this.sunday_rule
-                ? ` (and a Sunday)`
                 : ''
         }. `;
       }

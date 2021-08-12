@@ -3,7 +3,7 @@ export default {
     issued_until: null,
     advanced_reservation_days: 7,
     min_stay: 6,
-    sunday_rule: 'or',
+    sunday_rule: true,
     booking_class: 'L',
     cabinclass:'Y',
     no_luggage : true,

@@ -3,7 +3,7 @@ export default {
     issued_until: '2021-07-22',
     advanced_reservation_days: 5,
     min_stay: 4,
-    sunday_rule: 'or',
+    sunday_rule: true,
     cabinclass:'Y',
     no_luggage : true,
     booking_class: 'G',
