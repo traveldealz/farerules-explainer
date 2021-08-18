@@ -8,7 +8,7 @@ export default class {
 
   listForm() {
     let list = '<ul>';
-    this.issued_until != null ? list += '<li>Issued Until: ' + this.issued_until + '</li>' : {};
+    this.issued_until != null ? list += '<li>Issued Until: ' + this.#date_to_text(this.issued_until, 'de') + '</li>' : {};
     this.min_stay != null
         ? (list += '<li>Min. Stay: ' + this.min_stay + ' days')
         : {};
@@ -55,9 +55,9 @@ export default class {
       for (var i = 0; i < this.travel_period.length; i++) {
         list +=
             '<li>' +
-            this.travel_period[i].from +
+            this.#date_to_text(this.travel_period[i].from, 'de') +
             ' - ' +
-            this.travel_period[i].to +
+            this.#date_to_text(this.travel_period[i].to, 'de') +
             '</li>';
       }
       list += '</ul></li>';
@@ -68,9 +68,9 @@ export default class {
       for (var i = 0; i < this.travel_commenced.length; i++) {
         list +=
             '<li>' +
-            this.travel_commenced[i].from +
+            this.#date_to_text(this.travel_commenced[i].from, 'de') +
             ' - ' +
-            this.travel_commenced[i].to +
+            this.#date_to_text(this.travel_commenced[i].to, 'de') +
             '</li>';
       }
       list += '</ul></li>';
@@ -81,9 +81,9 @@ export default class {
       for (var i = 0; i < this.travel_period_blackout.length; i++) {
         list +=
             '<li>' +
-            this.travel_period_blackout[i].from +
+            this.#date_to_text(this.travel_period_blackout[i].from, 'de') +
             ' - ' +
-            this.travel_period_blackout[i].to +
+            this.#date_to_text(this.travel_period_blackout[i].to, 'de') +
             '</li>';
       }
       list += '</ul></li>';
@@ -94,9 +94,9 @@ export default class {
       for (var i = 0; i < this.travel_period_from.length; i++) {
         list +=
             '<li>' +
-            this.travel_period_from[i].from +
+            this.#date_to_text(this.travel_period_from[i].from, 'de') +
             ' - ' +
-            this.travel_period_from[i].to +
+            this.#date_to_text(this.travel_period_from[i].to, 'de') +
             '</li>';
       }
       list += '</ul></li>';
@@ -107,9 +107,9 @@ export default class {
       for (var i = 0; i < this.travel_period_to.length; i++) {
         list +=
             '<li>' +
-            this.travel_period_to[i].from +
+            this.#date_to_text(this.travel_period_to[i].from, 'de') +
             ' - ' +
-            this.travel_period_to[i].to +
+            this.#date_to_text(this.travel_period_to[i].to, 'de') +
             '</li>';
       }
       list += '</ul></li>';
