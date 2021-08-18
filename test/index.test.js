@@ -12,7 +12,7 @@ describe('Test Explain', () => {
   let explain = new Explainer('');
   Object.defineProperty(explain, 'issued_until', {value: '2021-07-22'});
   Object.defineProperty(explain, 'min_stay', {value: 4});
-  Object.defineProperty(explain, 'sunday_rule', {value: 'or'});
+  Object.defineProperty(explain, 'sunday_rule', {value: true});
   Object.defineProperty(explain, 'booking_class', {value: 'K'});
   console.log(explain.explain('de'));
   it(`issued_until`, () =>
