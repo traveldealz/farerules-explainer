@@ -10,7 +10,7 @@ var _parse_date = /*#__PURE__*/_classPrivateFieldLooseKey("parse_date");
 
 var _date_to_text = /*#__PURE__*/_classPrivateFieldLooseKey("date_to_text");
 
-export default class {
+class Explainer {
   constructor(text) {
     Object.defineProperty(this, _date_to_text, {
       value: _date_to_text2
@@ -24,6 +24,90 @@ export default class {
     this.text = '';
     this.now = new Date();
     this.text = text.replaceAll(/\n+/g, ' ').replaceAll(/[ ]+/g, ' ');
+  }
+
+  listForm() {
+    let list = '<ul>';
+    this.issued_until != null ? list += '<li>Issued Until: ' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.issued_until, 'de') + '</li>' : {};
+    this.min_stay != null ? list += '<li>Min. Stay: ' + this.min_stay + ' days' : {};
+
+    if (this.sunday_rule != null) {
+      if (this.min_stay != null) {
+        list += ' or a Sunday </li>';
+      } else {
+        list += '<li>Min. Stay: A Sunday</li>';
+      }
+    } else {
+      if (this.min_stay != null) {
+        list += '</li>';
+      }
+    }
+
+    this.max_stay != null ? list += '<li>Max. Stay: ' + this.max_stay + ' months</li>' : {};
+    this.booking_class != null ? list += '<li>Booking Class: ' + this.booking_class + '</li>' : {};
+    this.cancelable === 'yes' || this.cancelable === 'no' ? list += '<li>Cancelable: ' + this.cancelable + '</li>' : list += '<li>Cancelable: ' + this.cancelable.currency + this.cancelable.price + '</li>';
+    this.change === 'yes' || this.change === 'no' ? list += '<li>Change: ' + this.change + '</li>' : list += '<li>Rebooking: ' + this.change.currency + this.change.price + '</li>';
+    this.cabinclass != null ? list += '<li>Cabin Class: ' + this.cabinclass + '</li>' : {};
+    this.weekday_to != null ? list += '<li>Weekday To: ' + this.weekday_to + '</li>' : {};
+    this.weekday_from != null ? list += '<li>Weekday From: ' + this.weekday_from + '</li>' : {};
+    this.weekday != null ? list += '<li>Weekday: ' + this.weekday.from + ' - ' + this.weekday.until + '</li>' : {};
+    this.advanced_reservation_days != null ? list += '<li>Advanced Reservation : ' + this.advanced_reservation_days + ' days</li>' : {};
+    list += '<li>Stopover: ' + this.stopover + '</li>';
+
+    if (this.travel_period != null) {
+      list += '<li>Travel Period: <ul>';
+
+      for (var i = 0; i < this.travel_period.length; i++) {
+        list += '<li>' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period[i].from, 'de') + ' - ' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period[i].to, 'de') + '</li>';
+      }
+
+      list += '</ul></li>';
+    }
+
+    if (this.travel_commenced != null) {
+      list += '<li>Travel Commenced: <ul>';
+
+      for (var i = 0; i < this.travel_commenced.length; i++) {
+        list += '<li>' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced[i].from, 'de') + ' - ' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced[i].to, 'de') + '</li>';
+      }
+
+      list += '</ul></li>';
+    }
+
+    if (this.travel_period_blackout != null) {
+      list += '<li>Travel Period Blackout: <ul>';
+
+      for (var i = 0; i < this.travel_period_blackout.length; i++) {
+        list += '<li>' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period_blackout[i].from, 'de') + ' - ' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period_blackout[i].to, 'de') + '</li>';
+      }
+
+      list += '</ul></li>';
+    }
+
+    if (this.travel_period_from != null) {
+      list += '<li>Travel Period From: <ul>';
+
+      for (var i = 0; i < this.travel_period_from.length; i++) {
+        list += '<li>' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period_from[i].from, 'de') + ' - ' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period_from[i].to, 'de') + '</li>';
+      }
+
+      list += '</ul></li>';
+    }
+
+    if (this.travel_period_to != null) {
+      list += '<li>Travel Period To: <ul>';
+
+      for (var i = 0; i < this.travel_period_to.length; i++) {
+        list += '<li>' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period_to[i].from, 'de') + ' - ' + _classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_period_to[i].to, 'de') + '</li>';
+      }
+
+      list += '</ul></li>';
+    }
+
+    this.child_charge != null ? list += '<li>Child Charge: ' + this.child_charge * 100 + '%</li>' : {};
+    this.infant_charge != null ? list += '<li>Infant Charge: ' + this.infant_charge * 100 + '%</li>' : {};
+    this.infant_seat_charge != null ? list += '<li>Infant with Seat Charge: ' + this.infant_seat_charge * 100 + '%</li>' : {};
+    return list + '</ul>';
   }
 
   get cancelable() {
@@ -106,6 +190,19 @@ export default class {
     }
 
     return found[1];
+  }
+
+  get weekday() {
+    let found = this.text.match(/PERMITTED (\w\w\w) THROUGH (\w\w\w)/);
+
+    if (null === found || 3 !== found.length) {
+      return null;
+    }
+
+    return {
+      from: found[1],
+      until: found[2]
+    };
   }
 
   get weekday_to() {
@@ -213,9 +310,9 @@ export default class {
       return null;
     }
 
-    let findand = this.text.match(/AND - TRAVEL FROM/);
-    let findor = this.text.match(/OR - TRAVEL FROM/);
-    return findand != null ? 'and' : findor != null ? 'or' : true;
+    return true; //let findand = this.text.match(/AND - TRAVEL FROM/);
+    //let findor = this.text.match(/OR - TRAVEL FROM/);
+    //return findand != null ? 'and' : findor != null ? 'or' : true;
   }
 
   get max_stay() {
@@ -295,24 +392,68 @@ export default class {
           result += `Abflüge bis spätestens ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.to, lang)}`;
         }
       } else {
-        result += `Flüge ohne einen bestimmten Reisezeitraum.`;
+        result += `Flüge ohne einen bestimmten Reisezeitraum`;
       }
 
-      result += `. `;
+      result += '.';
+
+      if (this.weekday_to) {
+        result += ' Allerdings darf der Abflug nur an einem ';
+
+        for (var i = 0; i < this.weekday_to.length - 1; i++) {
+          result += tage[this.weekday_to[i]] + ', ';
+        }
+
+        result += 'oder ' + tage[this.weekday_to[this.weekday_to.length - 1]] + ' stattfinden.';
+      }
+
+      if (this.weekday_from) {
+        result += ' Der Rückflug darf nur an einem ';
+
+        for (var i = 0; i < this.weekday_from.length - 1; i++) {
+          result += tage[this.weekday_from[i]] + ', ';
+        }
+
+        result += 'oder ' + tage[this.weekday_from[this.weekday_from.length - 1]] + ' stattfinden.';
+      }
+
+      if (this.weekday) {
+        result += ' Dieses Angebot gilt nur für Flüge zwischen ' + tage[this.weekday.from] + ' und ' + tage[this.weekday.until] + '.';
+      }
 
       if (null === this.issued_until) {
-        result += `Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
+        result += ` Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
       }
 
       if (this.min_stay) {
-        result += `Der Mindestaufenthalt beträgt ${this.min_stay} Tage${'or' === this.sunday_rule ? ` oder eine Nacht von Samstag auf Sonntag` : 'and' === this.sunday_rule ? ` und eine Nacht von Samstag auf Sonntag` : ''}. `;
+        result += ` Der Mindestaufenthalt beträgt ${this.min_stay} Tage${true === this.sunday_rule ? ` oder eine Nacht von Samstag auf Sonntag` : ''}. `;
       }
 
       if (this.max_stay) {
         result += `Der maximale Aufenthalt beträgt ${1 === this.max_stay ? `einen Monat` : `${this.max_stay} Monate`}. `;
       }
 
-      result += `\nDie Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`;
+      result += '\nDie ';
+
+      switch (this.cabinclass) {
+        case 'Y':
+          result += 'Economy-Class-';
+          break;
+
+        case 'C':
+          result += 'Business-Class-';
+          break;
+
+        case 'W':
+          result += 'Premium-Economy-Class-';
+          break;
+
+        case 'F':
+          result += 'First-Class-';
+          break;
+      }
+
+      result += `Tickets werden in Buchungsklasse ${this.booking_class} ausgestellt`;
 
       if (this.advanced_reservation_days) {
         result += ` und müssen mindestens ${this.advanced_reservation_days} Tage vor Abflug gebucht werden. `;
@@ -320,12 +461,150 @@ export default class {
         result += `.`;
       }
 
+      this.no_luggage ? result += 'Bei diesem Tarif ist kein Aufgabegepäck inklusive.' : {};
+
       if ('free' === this.stopover) {
-        result += `Mindestens ein kostenloser Stopover ist erlaubt.`;
+        result += ` Mindestens ein kostenloser Stopover ist erlaubt.`;
       } else if ('not permitted' === this.stopover) {
-        result += `Stopover sind nicht erlaubt.`;
+        result += ` Stopover sind nicht erlaubt.`;
       }
-    } else {// Fallback to en
+
+      if (this.cancelable != null) {
+        result += ' Diese Flüge lassen sich ';
+        this.cancelable === 'no' ? result += 'nicht' : this.cancelable === 'yes' ? result += 'kostenlos' : result += 'für ' + this.cancelable.price + ' ' + this.cancelable.currency;
+        result += ' stornieren';
+      }
+
+      if (this.change != null) {
+        this.change === 'no' && this.cancelable === 'no' || this.change === 'yes' && this.cancelable === 'yes' ? result += ' und auch' : result += ' aber';
+        result += ' umbuchen lassen sich die Flüge ';
+        this.change === 'no' ? result += 'nicht.' : this.change === 'yes' ? result += 'ohne Umbuchungsgebühr.' : result += 'für ' + this.cancelable.price + ' ' + this.cancelable.currency + '.';
+      }
+    } else {
+      // Fallback to en
+      result += `This fare can be booked ${this.issued_until ? `until ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.issued_until, lang)} ` : ''}for `;
+
+      if (this.travel_period) {
+        result += `trips between ${this.travel_period.map(({
+          from,
+          to
+        }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} ${period.from == null ? '' : ' - '} ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')}`;
+      } else if (this.travel_period_from) {
+        result += `departures between ${this.travel_period_from.map(({
+          from,
+          to
+        }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+
+        if (this.travel_period_to) {
+          result += `and inbound flights between ${this.travel_period_to.map(({
+            from,
+            to
+          }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+        }
+      } else if (this.travel_period_to) {
+        result += `inbound flights between ${this.travel_period_to.map(({
+          from,
+          to
+        }) => this.constructor.month_day_period_to_yearly_periods(from, to, this.now)).flat().sort((a, b) => a.from > b.from).map(period => `${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.from, lang)} - ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](period.to, lang)}`).join(', ')} `;
+      } else if (this.travel_commenced) {
+        if (this.travel_commenced.from && this.travel_commenced.to) {
+          result += `Departures between ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.from, lang)} und ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.to, lang)}`;
+        } else if (this.travel_commenced.from) {
+          result += `Departures after ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.from, lang)}`;
+        } else if (this.travel_commenced.to) {
+          result += `Departures before ${_classPrivateFieldLooseBase(this, _date_to_text)[_date_to_text](this.travel_commenced.to, lang)}`;
+        }
+      } else {
+        result += `flights without a specific travel period`;
+      }
+
+      result += '.';
+
+      if (this.weekday_to) {
+        result += ' However, the outbound flight may only take place on a ';
+
+        for (var i = 0; i < this.weekday_to.length - 1; i++) {
+          result += days[this.weekday_to[i]] + ', ';
+        }
+
+        result += 'or ' + days[this.weekday_to[this.weekday_to.length - 1]] + '.';
+      }
+
+      if (this.weekday_from) {
+        result += ' The inbound flight can take place on a ';
+
+        for (var i = 0; i < this.weekday_from.length - 1; i++) {
+          result += days[this.weekday_from[i]] + ', ';
+        }
+
+        result += 'or ' + days[this.weekday_from[this.weekday_from.length - 1]] + '.';
+      }
+
+      if (this.weekday) {
+        result += ' This deal is only available for flights departing from ' + days[this.weekday.from] + ' to ' + days[this.weekday.until] + '.';
+      }
+
+      if (null === this.issued_until) {
+        result += ` The fare has no expiration date and can thus be withdrawn anytime. `;
+      }
+
+      if (this.min_stay) {
+        result += ` The minimum stay requirement is of ${this.min_stay} days${true === this.sunday_rule ? ` (or a Sunday)` : ''}. `;
+      }
+
+      if (this.max_stay) {
+        result += `Furthermore, your stay cannot exceed ${1 === this.max_stay ? `one month` : `${this.max_stay} months`}. `;
+      }
+
+      result += '\nThe ';
+
+      switch (this.cabinclass) {
+        case 'Y':
+          result += 'economy class';
+          break;
+
+        case 'C':
+          result += 'business class';
+          break;
+
+        case 'W':
+          result += 'premium economy';
+          break;
+
+        case 'F':
+          result += 'first class';
+          break;
+      }
+
+      result += ` tickets are issued in booking class ${this.booking_class}`;
+
+      if (this.advanced_reservation_days) {
+        result += ` and have to be booked at least ${this.advanced_reservation_days} days before departure. `;
+      } else {
+        result += `.`;
+      }
+
+      this.no_luggage ? result += 'This fare does not include any checked luggage.' : {};
+
+      if ('free' === this.stopover) {
+        result += ` At least one free stopover is permitted.`;
+      } else if ('not permitted' === this.stopover) {
+        result += ` Stopovers are not permitted.`;
+      }
+
+      if (this.cancelable != null) {
+        result += ' These flights can';
+        this.cancelable === 'no' ? result += "'t" : {};
+        result += ' be canceled';
+        this.cancelable === 'yes' ? result += ' for free' : this.cancelable !== 'no' ? result += ' for ' + this.cancelable.currency + ' ' + this.cancelable.price : {};
+      }
+
+      if (this.change != null) {
+        this.change === 'no' && this.cancelable === 'no' || this.change === 'yes' && this.cancelable === 'yes' ? result += ' and also' : result += ' but can';
+        this.change === 'no' ? result += "can't" : {};
+        result += ' be rebooked ';
+        this.change === 'yes' ? result += 'without having to pay a rebooking fee.' : this.change !== 'no' ? result += 'for ' + this.change.currency + ' ' + this.change.price + '.' : {};
+      }
     }
 
     return result;
@@ -438,3 +717,22 @@ const months = {
   NOV: '11',
   DEC: '12'
 };
+const tage = {
+  MON: 'Montag',
+  TUE: 'Dienstag',
+  WED: 'Mittwoch',
+  THU: 'Donnerstag',
+  FRI: 'Freitag',
+  SAT: 'Samstag',
+  SUN: 'Sonntag'
+};
+const days = {
+  MON: 'Monday',
+  TUE: 'Tuesday',
+  WED: 'Wednesday',
+  THU: 'Thursday',
+  FRI: 'Friday',
+  SAT: 'Saturday',
+  SUN: 'Sunday'
+};
+export default Explainer;
