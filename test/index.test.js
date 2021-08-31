@@ -218,13 +218,13 @@ describe('Test Explain', () => {
     );
   });
   it(`Hinflug-Wochentage`, () => {
-    Object.defineProperty(explain, 'weekday_to', {value: ['MON', 'TUE', 'WED'], configurable: true});
+    Object.defineProperty(explain, 'weekday_from', {value: ['MON', 'TUE', 'WED'], configurable: true});
     expect(explain.explain('de')).to.contain(
         'Allerdings darf der Abflug nur an einem Montag, Dienstag, oder Mittwoch stattfinden.'
     );
   });
   it(`Rückflug-Wochentage`, () => {
-    Object.defineProperty(explain, 'weekday_from', {value: ['SUN', 'TUE', 'WED'], configurable: true});
+    Object.defineProperty(explain, 'weekday_to', {value: ['SUN', 'TUE', 'WED'], configurable: true});
     expect(explain.explain('de')).to.contain(
         'Der Rückflug darf nur an einem Sonntag, Dienstag, oder Mittwoch stattfinden.'
     );
