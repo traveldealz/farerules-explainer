@@ -510,26 +510,26 @@ class Explainer {
 
       result += '.';
 
-      if (this.weekday_to) {
-        result += ' Allerdings darf der Abflug nur an einem ';
-        for (var i = 0; i < this.weekday_to.length - 1; i++) {
-          result += tage[this.weekday_to[i]] + ', ';
-        }
-        result +=
-          'oder ' +
-          tage[this.weekday_to[this.weekday_to.length - 1]] +
-          ' stattfinden.';
-      }
-
       if (this.weekday_from) {
-        result += ' Der Rückflug darf nur an einem ';
+        result += ' Allerdings darf der Abflug nur an einem ';
         for (var i = 0; i < this.weekday_from.length - 1; i++) {
           result += tage[this.weekday_from[i]] + ', ';
         }
         result +=
-          'oder ' +
-          tage[this.weekday_from[this.weekday_from.length - 1]] +
-          ' stattfinden.';
+            'oder ' +
+            tage[this.weekday_from[this.weekday_from.length - 1]] +
+            ' stattfinden.';
+      }
+
+      if (this.weekday_to) {
+        result += ' Der Rückflug darf nur an einem ';
+        for (var i = 0; i < this.weekday_to.length - 1; i++) {
+          result += tage[this.weekday_to[i]] + ', ';
+        }
+        result +=
+            'oder ' +
+            tage[this.weekday_to[this.weekday_to.length - 1]] +
+            ' stattfinden.';
       }
 
       if (this.weekday) {
@@ -545,12 +545,14 @@ class Explainer {
         result += ` Der Tarif hat kein Ablaufdatum, kann aber trotzdem jederzeit zurückgezogen werden. `;
       }
 
-      if (this.min_stay) {
-        result += ` Der Mindestaufenthalt beträgt ${this.min_stay} Tage${
-          true === this.sunday_rule
-            ? ` oder eine Nacht von Samstag auf Sonntag`
-            : ''
-        }. `;
+      if (this.min_stay || this.sunday_rule) {
+        result += ' Der Mindestaufenthalt beträgt ';
+        this.min_stay ? result += this.min_stay +  ' Tage':{};
+        if(this.min_stay && this.sunday_rule) {
+          result += ' oder '
+        }
+        this.sunday_rule ? result += `eine Nacht von Samstag auf Sonntag. ` : {};
+
       }
 
       if (this.max_stay) {
@@ -727,6 +729,15 @@ class Explainer {
 
       if (this.weekday_to) {
         result += ' However, the outbound flight may only take place on a ';
+        for (var i = 0; i < this.weekday_from.length - 1; i++) {
+          result += days[this.weekday_from[i]] + ', ';
+        }
+        result +=
+            'or ' + days[this.weekday_from[this.weekday_from.length - 1]] + '.';
+      }
+
+      if (this.weekday_to) {
+        result += ' The inbound flight can take place on a ';
         for (var i = 0; i < this.weekday_to.length - 1; i++) {
           result += days[this.weekday_to[i]] + ', ';
         }
@@ -734,32 +745,22 @@ class Explainer {
           'or ' + days[this.weekday_to[this.weekday_to.length - 1]] + '.';
       }
 
-      if (this.weekday_from) {
-        result += ' The inbound flight can take place on a ';
-        for (var i = 0; i < this.weekday_from.length - 1; i++) {
-          result += days[this.weekday_from[i]] + ', ';
-        }
-        result +=
-          'or ' + days[this.weekday_from[this.weekday_from.length - 1]] + '.';
-      }
-
-      if (this.weekday) {
-        result +=
-          ' This deal is only available for flights departing from ' +
-          days[this.weekday.from] +
-          ' to ' +
-          days[this.weekday.until] +
-          '.';
+      if(this.weekday){
+        result += ' This deal is only available for flights departing from ' + days[this.weekday.from] + ' to ' + days[this.weekday.until] + '.';
       }
 
       if (null === this.issued_until) {
         result += ` The fare has no expiration date and can thus be withdrawn anytime. `;
       }
 
-      if (this.min_stay) {
-        result += ` The minimum stay requirement is of ${this.min_stay} days${
-          true === this.sunday_rule ? ` (or a Sunday)` : ''
-        }. `;
+      if (this.min_stay || this.sunday_rule) {
+        result += ' The minimum stay requirement is of ';
+        this.min_stay ? result += this.min_stay +  ' days':{};
+        if(this.min_stay && this.sunday_rule) {
+          result += ' or '
+        }
+        this.sunday_rule ? result += `one Sunday. ` : {};
+
       }
 
       if (this.max_stay) {
