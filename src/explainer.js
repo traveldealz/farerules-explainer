@@ -236,7 +236,7 @@ class Explainer {
   }
 
   get weekday_to() {
-    let found = this.text.match(/TO [A-Z ]+ - PERMITTED ((\w\w\w\/)+\w\w\w)/);
+    let found = this.text.match(/(?:TO [A-Z ]+|OUTBOUND) - PERMITTED ((\w\w\w\/)+\w\w\w)/);
     if (null === found || 3 !== found.length) {
       return null;
     }
@@ -245,7 +245,7 @@ class Explainer {
   }
 
   get weekday_from() {
-    let found = this.text.match(/FROM [A-Z ]+ - PERMITTED ((\w\w\w\/)+\w\w\w)/);
+    let found = this.text.match(/(?:FROM [A-Z ]+|INBOUND) - PERMITTED ((\w\w\w\/)+\w\w\w)/);
     if (null === found || 3 !== found.length) {
       return null;
     }
