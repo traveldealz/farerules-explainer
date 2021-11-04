@@ -1,6 +1,6 @@
 {
   "name": "@traveldealz/farerules-explainer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "serve": "wcd-cli serve khFrtKXgTGWe7koI9o43 --open",
     "test": "mocha"
