@@ -11,7 +11,7 @@ class Explainer {
     this.issued_until != null
       ? (list +=
           '<li>Issued Until: ' +
-          this.#date_to_text(this.issued_until, 'de') +
+          this.date_to_text(this.issued_until, 'de') +
           '</li>')
       : {};
     this.min_stay != null
@@ -78,9 +78,9 @@ class Explainer {
       for (var i = 0; i < this.travel_period.length; i++) {
         list +=
           '<li>' +
-          this.#date_to_text(this.travel_period[i].from, 'de') +
+          this.date_to_text(this.travel_period[i].from, 'de') +
           ' - ' +
-          this.#date_to_text(this.travel_period[i].to, 'de') +
+          this.date_to_text(this.travel_period[i].to, 'de') +
           '</li>';
       }
       list += '</ul></li>';
@@ -91,9 +91,9 @@ class Explainer {
       for (var i = 0; i < this.travel_commenced.length; i++) {
         list +=
           '<li>' +
-          this.#date_to_text(this.travel_commenced[i].from, 'de') +
+          this.date_to_text(this.travel_commenced[i].from, 'de') +
           ' - ' +
-          this.#date_to_text(this.travel_commenced[i].to, 'de') +
+          this.date_to_text(this.travel_commenced[i].to, 'de') +
           '</li>';
       }
       list += '</ul></li>';
@@ -104,9 +104,9 @@ class Explainer {
       for (var i = 0; i < this.travel_period_blackout.length; i++) {
         list +=
           '<li>' +
-          this.#date_to_text(this.travel_period_blackout[i].from, 'de') +
+          this.date_to_text(this.travel_period_blackout[i].from, 'de') +
           ' - ' +
-          this.#date_to_text(this.travel_period_blackout[i].to, 'de') +
+          this.date_to_text(this.travel_period_blackout[i].to, 'de') +
           '</li>';
       }
       list += '</ul></li>';
@@ -117,9 +117,9 @@ class Explainer {
       for (var i = 0; i < this.travel_period_from.length; i++) {
         list +=
           '<li>' +
-          this.#date_to_text(this.travel_period_from[i].from, 'de') +
+          this.date_to_text(this.travel_period_from[i].from, 'de') +
           ' - ' +
-          this.#date_to_text(this.travel_period_from[i].to, 'de') +
+          this.date_to_text(this.travel_period_from[i].to, 'de') +
           '</li>';
       }
       list += '</ul></li>';
@@ -130,9 +130,9 @@ class Explainer {
       for (var i = 0; i < this.travel_period_to.length; i++) {
         list +=
           '<li>' +
-          this.#date_to_text(this.travel_period_to[i].from, 'de') +
+          this.date_to_text(this.travel_period_to[i].from, 'de') +
           ' - ' +
-          this.#date_to_text(this.travel_period_to[i].to, 'de') +
+          this.date_to_text(this.travel_period_to[i].to, 'de') +
           '</li>';
       }
       list += '</ul></li>';
@@ -236,7 +236,9 @@ class Explainer {
   }
 
   get weekday_to() {
-    let found = this.text.match(/(?:TO [A-Z ]+|OUTBOUND) - PERMITTED ((\w\w\w\/)+\w\w\w)/);
+    let found = this.text.match(
+      /(?:TO [A-Z ]+|OUTBOUND) - PERMITTED ((\w\w\w\/)+\w\w\w)/
+    );
     if (null === found || 3 !== found.length) {
       return null;
     }
@@ -245,7 +247,9 @@ class Explainer {
   }
 
   get weekday_from() {
-    let found = this.text.match(/(?:FROM [A-Z ]+|INBOUND) - PERMITTED ((\w\w\w\/)+\w\w\w)/);
+    let found = this.text.match(
+      /(?:FROM [A-Z ]+|INBOUND) - PERMITTED ((\w\w\w\/)+\w\w\w)/
+    );
     if (null === found || 3 !== found.length) {
       return null;
     }
@@ -293,7 +297,7 @@ class Explainer {
   }
 
   get travel_period() {
-    let found = this.#parse_travel_period(
+    let found = this.parse_travel_period(
       /Seasonal restrictions\s*PERMITTED ([A-Z0-9 ]+) ON/
     );
     if (null === found) {
@@ -313,23 +317,23 @@ class Explainer {
     }
 
     return {
-      from: found[1] ? this.#parse_date(found[1]) : null,
-      to: found[2] ? this.#parse_date(found[2]) : null,
+      from: found[1] ? this.parse_date(found[1]) : null,
+      to: found[2] ? this.parse_date(found[2]) : null,
     };
   }
 
   get travel_period_blackout() {
-    return this.#parse_travel_period(/TRAVEL IS NOT PERMITTED ([A-Z0-9 ]+)./);
+    return this.parse_travel_period(/TRAVEL IS NOT PERMITTED ([A-Z0-9 ]+)./);
   }
 
   get travel_period_from() {
-    return this.#parse_travel_period(
+    return this.parse_travel_period(
       /(?:FROM [A-Z ]+|OUTBOUND) - PERMITTED ([A-Z0-9 ]+) FOR EACH/
     );
   }
 
   get travel_period_to() {
-    return this.#parse_travel_period(
+    return this.parse_travel_period(
       /(?:TO [A-Z ]+|INBOUND) - PERMITTED ([A-Z0-9 ]+) FOR EACH/
     );
   }
@@ -407,7 +411,7 @@ class Explainer {
     if ('de' === lang) {
       result += `Buchbar ist der Tarif ${
         this.issued_until
-          ? `bis zum ${this.#date_to_text(this.issued_until, lang)} `
+          ? `bis zum ${this.date_to_text(this.issued_until, lang)} `
           : ''
       }für `;
 
@@ -424,9 +428,9 @@ class Explainer {
           .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
-              `${this.#date_to_text(period.from, lang)} ${
+              `${this.date_to_text(period.from, lang)} ${
                 period.from == null ? '' : ' - '
-              } ${this.#date_to_text(period.to, lang)}`
+              } ${this.date_to_text(period.to, lang)}`
           )
           .join(', ')}`;
       } else if (this.travel_period_from) {
@@ -442,7 +446,7 @@ class Explainer {
           .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
-              `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
+              `${this.date_to_text(period.from, lang)} - ${this.date_to_text(
                 period.to,
                 lang
               )}`
@@ -461,10 +465,10 @@ class Explainer {
             .sort((a, b) => a.from > b.from)
             .map(
               (period) =>
-                `${this.#date_to_text(
-                  period.from,
+                `${this.date_to_text(period.from, lang)} - ${this.date_to_text(
+                  period.to,
                   lang
-                )} - ${this.#date_to_text(period.to, lang)}`
+                )}`
             )
             .join(', ')} `;
         }
@@ -481,7 +485,7 @@ class Explainer {
           .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
-              `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
+              `${this.date_to_text(period.from, lang)} - ${this.date_to_text(
                 period.to,
                 lang
               )}`
@@ -489,17 +493,17 @@ class Explainer {
           .join(', ')} `;
       } else if (this.travel_commenced) {
         if (this.travel_commenced.from && this.travel_commenced.to) {
-          result += `Abflüge zwischen dem ${this.#date_to_text(
+          result += `Abflüge zwischen dem ${this.date_to_text(
             this.travel_commenced.from,
             lang
-          )} und ${this.#date_to_text(this.travel_commenced.to, lang)}`;
+          )} und ${this.date_to_text(this.travel_commenced.to, lang)}`;
         } else if (this.travel_commenced.from) {
-          result += `Abflüge nach dem ${this.#date_to_text(
+          result += `Abflüge nach dem ${this.date_to_text(
             this.travel_commenced.from,
             lang
           )}`;
         } else if (this.travel_commenced.to) {
-          result += `Abflüge bis spätestens ${this.#date_to_text(
+          result += `Abflüge bis spätestens ${this.date_to_text(
             this.travel_commenced.to,
             lang
           )}`;
@@ -516,9 +520,9 @@ class Explainer {
           result += tage[this.weekday_from[i]] + ', ';
         }
         result +=
-            'oder ' +
-            tage[this.weekday_from[this.weekday_from.length - 1]] +
-            ' stattfinden.';
+          'oder ' +
+          tage[this.weekday_from[this.weekday_from.length - 1]] +
+          ' stattfinden.';
       }
 
       if (this.weekday_to) {
@@ -527,9 +531,9 @@ class Explainer {
           result += tage[this.weekday_to[i]] + ', ';
         }
         result +=
-            'oder ' +
-            tage[this.weekday_to[this.weekday_to.length - 1]] +
-            ' stattfinden.';
+          'oder ' +
+          tage[this.weekday_to[this.weekday_to.length - 1]] +
+          ' stattfinden.';
       }
 
       if (this.weekday) {
@@ -547,12 +551,13 @@ class Explainer {
 
       if (this.min_stay || this.sunday_rule) {
         result += ' Der Mindestaufenthalt beträgt ';
-        this.min_stay ? result += this.min_stay +  ' Tage':{};
-        if(this.min_stay && this.sunday_rule) {
-          result += ' oder '
+        this.min_stay ? (result += this.min_stay + ' Tage') : {};
+        if (this.min_stay && this.sunday_rule) {
+          result += ' oder ';
         }
-        this.sunday_rule ? result += `eine Nacht von Samstag auf Sonntag. ` : {};
-
+        this.sunday_rule
+          ? (result += `eine Nacht von Samstag auf Sonntag. `)
+          : {};
       }
 
       if (this.max_stay) {
@@ -624,7 +629,7 @@ class Explainer {
       // Fallback to en
       result += `This fare can be booked ${
         this.issued_until
-          ? `until ${this.#date_to_text(this.issued_until, lang)} `
+          ? `until ${this.date_to_text(this.issued_until, lang)} `
           : ''
       }for `;
 
@@ -641,9 +646,9 @@ class Explainer {
           .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
-              `${this.#date_to_text(period.from, lang)} ${
+              `${this.date_to_text(period.from, lang)} ${
                 period.from == null ? '' : ' - '
-              } ${this.#date_to_text(period.to, lang)}`
+              } ${this.date_to_text(period.to, lang)}`
           )
           .join(', ')}`;
       } else if (this.travel_period_from) {
@@ -659,7 +664,7 @@ class Explainer {
           .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
-              `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
+              `${this.date_to_text(period.from, lang)} - ${this.date_to_text(
                 period.to,
                 lang
               )}`
@@ -678,10 +683,10 @@ class Explainer {
             .sort((a, b) => a.from > b.from)
             .map(
               (period) =>
-                `${this.#date_to_text(
-                  period.from,
+                `${this.date_to_text(period.from, lang)} - ${this.date_to_text(
+                  period.to,
                   lang
-                )} - ${this.#date_to_text(period.to, lang)}`
+                )}`
             )
             .join(', ')} `;
         }
@@ -698,7 +703,7 @@ class Explainer {
           .sort((a, b) => a.from > b.from)
           .map(
             (period) =>
-              `${this.#date_to_text(period.from, lang)} - ${this.#date_to_text(
+              `${this.date_to_text(period.from, lang)} - ${this.date_to_text(
                 period.to,
                 lang
               )}`
@@ -706,17 +711,17 @@ class Explainer {
           .join(', ')} `;
       } else if (this.travel_commenced) {
         if (this.travel_commenced.from && this.travel_commenced.to) {
-          result += `Departures between ${this.#date_to_text(
+          result += `Departures between ${this.date_to_text(
             this.travel_commenced.from,
             lang
-          )} und ${this.#date_to_text(this.travel_commenced.to, lang)}`;
+          )} und ${this.date_to_text(this.travel_commenced.to, lang)}`;
         } else if (this.travel_commenced.from) {
-          result += `Departures after ${this.#date_to_text(
+          result += `Departures after ${this.date_to_text(
             this.travel_commenced.from,
             lang
           )}`;
         } else if (this.travel_commenced.to) {
-          result += `Departures before ${this.#date_to_text(
+          result += `Departures before ${this.date_to_text(
             this.travel_commenced.to,
             lang
           )}`;
@@ -733,7 +738,7 @@ class Explainer {
           result += days[this.weekday_from[i]] + ', ';
         }
         result +=
-            'or ' + days[this.weekday_from[this.weekday_from.length - 1]] + '.';
+          'or ' + days[this.weekday_from[this.weekday_from.length - 1]] + '.';
       }
 
       if (this.weekday_to) {
@@ -745,8 +750,13 @@ class Explainer {
           'or ' + days[this.weekday_to[this.weekday_to.length - 1]] + '.';
       }
 
-      if(this.weekday){
-        result += ' This deal is only available for flights departing from ' + days[this.weekday.from] + ' to ' + days[this.weekday.until] + '.';
+      if (this.weekday) {
+        result +=
+          ' This deal is only available for flights departing from ' +
+          days[this.weekday.from] +
+          ' to ' +
+          days[this.weekday.until] +
+          '.';
       }
 
       if (null === this.issued_until) {
@@ -755,12 +765,11 @@ class Explainer {
 
       if (this.min_stay || this.sunday_rule) {
         result += ' The minimum stay requirement is of ';
-        this.min_stay ? result += this.min_stay +  ' days':{};
-        if(this.min_stay && this.sunday_rule) {
-          result += ' or '
+        this.min_stay ? (result += this.min_stay + ' days') : {};
+        if (this.min_stay && this.sunday_rule) {
+          result += ' or ';
         }
-        this.sunday_rule ? result += `one Sunday. ` : {};
-
+        this.sunday_rule ? (result += `one Sunday. `) : {};
       }
 
       if (this.max_stay) {
@@ -832,7 +841,7 @@ class Explainer {
     return result;
   }
 
-  #parse_travel_period(regex) {
+  parse_travel_period(regex) {
     let found = this.text.match(regex);
 
     if (null === found || 2 !== found.length) {
@@ -842,13 +851,13 @@ class Explainer {
     let periods = found[1].split('OR').map((period) => {
       let [from, to] = period
         .split('THROUGH')
-        .map((date) => this.#parse_date(date));
+        .map((date) => this.parse_date(date));
       return { from, to };
     });
     return periods;
   }
 
-  #parse_date(date) {
+  parse_date(date) {
     let [, day, month_name, year = null] = date
       .trim()
       .match(/(\d{2})(\w{3})(?: (\d{2})|)/);
@@ -856,7 +865,7 @@ class Explainer {
     return (year ? '20' + year + '-' : '') + months[month_name] + '-' + day;
   }
 
-  #date_to_text(date, lang = 'en') {
+  date_to_text(date, lang = 'en') {
     if (date == null) {
       return 'bis zum ';
     }
